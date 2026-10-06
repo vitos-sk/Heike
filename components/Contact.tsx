@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Check, Facebook, Instagram, Mail, Phone, Send } from "lucide-react";
 import { contact } from "@/lib/placeholder-data";
+import { HONEYPOT_FIELD } from "@/lib/honeypot";
 
 type Field = "name" | "email" | "msg" | "consent";
 type Errors = Partial<Record<Field, string>>;
@@ -17,16 +18,32 @@ const MESSAGES: Record<Field, string> = {
 
 const telHref = `tel:+49${contact.phone.replace(/^0/, "").replace(/\s/g, "")}`;
 
+export const WANT_QUESTIONS_EVENT = "heike:want-questions";
+
 export default function Contact() {
   const [errors, setErrors] = useState<Errors>({});
   const [done, setDone] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [wantsQuestions, setWantsQuestions] = useState(false);
+  const [sentWithQuestions, setSentWithQuestions] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Der Button „Hol dir deine 7 Reflexionsfragen“ kreuzt die Option im Formular an.
+  useEffect(() => {
+    const on = () => setWantsQuestions(true);
+    window.addEventListener(WANT_QUESTIONS_EVENT, on);
+    return () => window.removeEventListener(WANT_QUESTIONS_EVENT, on);
+  }, []);
 
   const clear = (field: Field) =>
     setErrors((prev) => (prev[field] ? { ...prev, [field]: undefined } : prev));
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    setServerError(null);
+    const form = e.currentTarget;
+    const data = new FormData(form);
     const name = String(data.get("name") ?? "").trim();
     const email = String(data.get("email") ?? "").trim();
     const msg = String(data.get("msg") ?? "").trim();
@@ -40,13 +57,41 @@ export default function Contact() {
     setErrors(next);
     if (Object.keys(next).length) {
       const first = (Object.keys(next) as Field[])[0];
-      e.currentTarget.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
+      form.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
       return;
     }
 
-    // TODO: Versand anbinden (mailto / Resend / Formspree) – wartet auf Entscheidung.
-    // Aktuell wird NICHTS gesendet; nur die Bestätigung wird angezeigt.
-    setDone(true);
+    setSending(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          message: msg,
+          consent: true,
+          wantsQuestions,
+          [HONEYPOT_FIELD]: String(data.get(HONEYPOT_FIELD) ?? ""),
+        }),
+      });
+      const result = (await res.json().catch(() => ({}))) as { error?: string };
+      if (!res.ok) {
+        setServerError(
+          result.error ??
+            `Das hat leider nicht geklappt. Bitte versuche es noch einmal oder schreib mir direkt an ${contact.email}.`,
+        );
+        return;
+      }
+      setSentWithQuestions(wantsQuestions);
+      setDone(true);
+    } catch {
+      setServerError(
+        `Keine Verbindung. Bitte versuche es noch einmal oder schreib mir direkt an ${contact.email}.`,
+      );
+    } finally {
+      setSending(false);
+    }
   }
 
   const inv = (f: Field) => (errors[f] ? "true" : undefined);
@@ -70,10 +115,11 @@ export default function Contact() {
               <h3 className="t-h3">Danke dir!</h3>
               <p className="t-body">
                 Deine Nachricht ist angekommen. Ich melde mich persönlich bei dir.
+                {sentWithQuestions && " Deine Reflexionsfragen bekommst du per E-Mail."}
               </p>
             </div>
           ) : (
-            <form className="ct-form" noValidate onSubmit={onSubmit}>
+            <form className="ct-form" noValidate onSubmit={onSubmit} ref={formRef}>
               <div>
                 <p className="sent">
                   Hallo Heike, ich bin{" "}
@@ -132,6 +178,26 @@ export default function Contact() {
                 )}
               </div>
 
+              <input
+                type="text"
+                name={HONEYPOT_FIELD}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="hp"
+                defaultValue=""
+              />
+
+              <label className="chk">
+                <input
+                  type="checkbox"
+                  name="wantsQuestions"
+                  checked={wantsQuestions}
+                  onChange={(e) => setWantsQuestions(e.target.checked)}
+                />
+                <span>Ich möchte außerdem die 7 Reflexionsfragen per E-Mail erhalten.</span>
+              </label>
+
               <div>
                 <label className="chk">
                   <input
@@ -156,10 +222,16 @@ export default function Contact() {
                 )}
               </div>
 
+              {serverError && (
+                <p className="ct-err" role="alert">
+                  {serverError}
+                </p>
+              )}
+
               <div>
-                <button className="btn" type="submit">
-                  {contact.form.submitLabel}
-                  <Send className="ic" strokeWidth={1.6} aria-hidden="true" />
+                <button className="btn" type="submit" disabled={sending}>
+                  {sending ? "Wird gesendet …" : contact.form.submitLabel}
+                  {!sending && <Send className="ic" strokeWidth={1.6} aria-hidden="true" />}
                 </button>
               </div>
             </form>

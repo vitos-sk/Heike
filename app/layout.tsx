@@ -1,11 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Figtree, Young_Serif } from "next/font/google";
 import { siteMeta } from "@/lib/placeholder-data";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import RevealObserver from "@/components/RevealObserver";
 import "./globals.css";
-import "./blocks.css";
 
 const display = Young_Serif({
   weight: "400",
@@ -50,13 +46,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <a className="skip" href="#main">
-          Zum Inhalt springen
-        </a>
-        <Header />
         {children}
-        <Footer />
-        <RevealObserver />
       </body>
     </html>
   );

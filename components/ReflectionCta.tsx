@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Heart, Lightbulb } from "lucide-react";
 import { reflection } from "@/lib/placeholder-data";
+import { WANT_QUESTIONS_EVENT } from "@/components/Contact";
 
 const total = reflection.questions.length;
 
@@ -31,7 +32,11 @@ export default function ReflectionCta() {
                 {text}
               </p>
             ))}
-            <a className="btn rv" href="#contact">
+            <a
+              className="btn rv"
+              href="#contact"
+              onClick={() => window.dispatchEvent(new Event(WANT_QUESTIONS_EVENT))}
+            >
               {reflection.buttonText}
               <ArrowRight className="ic" strokeWidth={1.6} aria-hidden="true" />
             </a>

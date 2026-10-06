@@ -1292,7 +1292,8 @@
   border-radius: 50%;
   background: #fff;
   color: var(--sage-deep);
-  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 0.95rem;
 }
 html:not(.js) .rf-deck {
   display: none;

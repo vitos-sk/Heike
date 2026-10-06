@@ -8,6 +8,10 @@ import Values from "@/components/Values";
 import Qualifications from "@/components/Qualifications";
 import ReflectionCta from "@/components/ReflectionCta";
 import Contact from "@/components/Contact";
+import News from "@/components/News";
+
+// Neuigkeiten kommen aus der Datenbank: alle 5 Minuten neu, sofort beim Speichern im Admin.
+export const revalidate = 300;
 
 export default function Home() {
   return (
@@ -20,6 +24,7 @@ export default function Home() {
       <About />
       <Values />
       <Qualifications />
+      <News />
       <ReflectionCta />
       <Contact />
     </main>

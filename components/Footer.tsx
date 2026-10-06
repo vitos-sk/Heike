@@ -2,10 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Info, Instagram, Mail, Phone } from "lucide-react";
 import { contact, footer, header } from "@/lib/placeholder-data";
+import { listPublishedPosts } from "@/lib/posts";
 
 const telHref = `tel:+49${contact.phone.replace(/^0/, "").replace(/\s/g, "")}`;
 
-export default function Footer() {
+export default async function Footer() {
+  const hasPosts = (await listPublishedPosts()).length > 0;
   const instagram = contact.social.find((s) => s.label === "Instagram");
   const facebook = contact.social.find((s) => s.label === "Facebook");
 
@@ -27,6 +29,11 @@ export default function Footer() {
                   <a href={`/${item.href}`}>{item.label}</a>
                 </li>
               ))}
+              {hasPosts && (
+                <li>
+                  <Link href="/blog">Aktuelles</Link>
+                </li>
+              )}
             </ul>
           </nav>
 
