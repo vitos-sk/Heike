@@ -1,0 +1,1626 @@
+/* Стили блоков. Источник: design-lab/*.html (утверждённые варианты).
+   container queries из макета заменены медиазапросами на тех же точках. */
+
+.ico {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--sage-soft);
+  color: var(--sage-deep);
+  flex: none;
+}
+.ico .ic {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+/* =====================================================================
+   01 · Header A — Ruhige Leiste
+   ===================================================================== */
+.hdr {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  padding-top: env(safe-area-inset-top);
+  transition: background 0.45s, box-shadow 0.45s;
+}
+.hdr.is-scrolled {
+  background: color-mix(in srgb, var(--cream) 90%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 var(--line);
+}
+.hdr-in {
+  max-width: 80rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.1rem;
+  transition: padding 0.4s var(--ease);
+}
+.is-scrolled .hdr-in {
+  padding-block: 0.55rem;
+}
+.hdr-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  min-width: 0;
+}
+.hdr-brand img {
+  height: 2.9rem;
+  width: auto;
+  transition: height 0.4s var(--ease);
+}
+.is-scrolled .hdr-brand img {
+  height: 2.3rem;
+}
+.hdr-name {
+  font-family: var(--f-display);
+  letter-spacing: 0.02em;
+  font-size: 1.05rem;
+  white-space: nowrap;
+}
+.hdr-nav {
+  display: none;
+  gap: 2rem;
+}
+.hdr-nav a {
+  white-space: nowrap;
+  position: relative;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding-block: 0.4rem;
+  color: var(--ink-soft);
+  transition: color 0.25s;
+}
+.hdr-nav a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--sage-dark);
+  transform: translateX(-50%) scale(0);
+  transition: transform 0.4s var(--ease);
+}
+.hdr-nav a:hover,
+.hdr-nav a.on {
+  color: var(--ink);
+}
+.hdr-nav a.on::after {
+  transform: translateX(-50%) scale(1);
+}
+.hdr-act {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+.hdr-tel {
+  white-space: nowrap;
+  display: none;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+.hdr-tel:hover {
+  color: var(--ink);
+}
+.hdr-act .btn {
+  white-space: nowrap;
+  min-height: 2.75rem;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.9rem;
+}
+.hdr-act .btn .long {
+  display: none;
+}
+.hdr-burger {
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: var(--sh-1);
+}
+.hdr-burger .x {
+  display: none;
+}
+.menu-open .hdr-burger .m {
+  display: none;
+}
+.menu-open .hdr-burger .x {
+  display: block;
+}
+
+.hdr-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow-y: auto;
+  background: var(--cream);
+  padding: calc(6rem + env(safe-area-inset-top)) clamp(1.25rem, 6vw, 2rem)
+    calc(1.5rem + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s, visibility 0.35s;
+}
+.menu-open .hdr-sheet {
+  opacity: 1;
+  visibility: visible;
+}
+.hdr-sheet nav a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  text-decoration: none;
+  font-family: var(--f-display);
+  font-size: 1.75rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--line);
+  transform: translateY(10px);
+  opacity: 0;
+  transition: transform 0.6s var(--ease), opacity 0.6s;
+}
+.menu-open .hdr-sheet nav a {
+  transform: none;
+  opacity: 1;
+}
+.menu-open .hdr-sheet nav a:nth-child(2) {
+  transition-delay: 0.05s;
+}
+.menu-open .hdr-sheet nav a:nth-child(3) {
+  transition-delay: 0.1s;
+}
+.menu-open .hdr-sheet nav a:nth-child(4) {
+  transition-delay: 0.15s;
+}
+.menu-open .hdr-sheet nav a:nth-child(5) {
+  transition-delay: 0.2s;
+}
+.hdr-sheet nav a .ic {
+  color: var(--sage-dark);
+  width: 1.1rem;
+  height: 1.1rem;
+}
+.hdr-sheet .foot {
+  margin-top: auto;
+  padding-top: 2rem;
+  display: grid;
+  gap: 0.6rem;
+}
+.hdr-sheet .foot .row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 2.75rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+.hdr-sheet .foot .btn {
+  margin-top: 0.6rem;
+}
+
+@media (max-width: 419px) {
+  /* имя рядом с логотипом не помещается рядом с кнопкой; ссылка остаётся подписанной через aria-label */
+  .hdr-name {
+    display: none;
+  }
+}
+@media (max-width: 479px) {
+  .hdr-brand img {
+    height: 2.4rem;
+  }
+  .is-scrolled .hdr-brand img {
+    height: 2.1rem;
+  }
+}
+@media (min-width: 600px) {
+  .hdr-act .btn .long {
+    display: inline;
+  }
+  .hdr-act .btn .short {
+    display: none;
+  }
+}
+@media (min-width: 960px) {
+  /* 960–1099: места на длинный текст кнопки не хватает, остаётся короткий */
+  .hdr-act .btn .long {
+    display: none;
+  }
+  .hdr-act .btn .short {
+    display: inline;
+  }
+  .hdr-nav {
+    display: flex;
+    gap: 1.1rem;
+  }
+  .hdr-burger {
+    display: none;
+  }
+  .hdr-tel {
+    display: inline-flex;
+  }
+  .hdr-sheet {
+    display: none;
+  }
+}
+@media (min-width: 1100px) {
+  .hdr-act .btn .long {
+    display: inline;
+  }
+  .hdr-act .btn .short {
+    display: none;
+  }
+  .hdr-nav {
+    gap: 1.5rem;
+  }
+}
+@media (min-width: 960px) and (max-width: 1279px) {
+  .hdr-tel {
+    display: none;
+  }
+}
+
+/* =====================================================================
+   02 · Hero A — Fenster
+   ===================================================================== */
+.hero {
+  background: var(--cream);
+  overflow: hidden;
+  padding-top: 5.2rem;
+}
+.hero-grid {
+  display: grid;
+  gap: 2.5rem;
+  padding-block: clamp(2rem, 6vw, 4rem) clamp(3.5rem, 8vw, 6.5rem);
+  align-items: center;
+}
+.hero-txt {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: start;
+}
+.hero-txt .t-lead {
+  max-width: 34rem;
+}
+.hero em {
+  font-style: normal;
+  color: var(--sage-dark);
+}
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+}
+.hero-creds {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.6rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  width: 100%;
+  max-width: 34rem;
+}
+.hero-creds li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-weight: 500;
+  font-size: 0.98rem;
+  color: var(--ink);
+}
+.hero-creds .ico {
+  width: 2.4rem;
+  height: 2.4rem;
+}
+.hero-creds .ico .ic {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.hero-fig {
+  position: relative;
+  margin: 0 auto;
+  width: min(76%, 18rem);
+  order: -1;
+}
+.hero-fig::before {
+  content: "";
+  position: absolute;
+  inset: -1.1rem -1.4rem 1.1rem 1.4rem;
+  border: 1.5px solid color-mix(in srgb, var(--sage) 55%, transparent);
+  border-radius: 999px 999px 32px 32px;
+}
+.hero-fig::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  width: 70%;
+  aspect-ratio: 1;
+  right: -22%;
+  bottom: -12%;
+  border-radius: 50%;
+  background: var(--sage-soft);
+}
+.hero-arch {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 4 / 5.2;
+  border-radius: 999px 999px 32px 32px;
+  overflow: hidden;
+  box-shadow: var(--sh-2);
+  animation: archIn 1.4s var(--ease) both;
+}
+.hero-arch img {
+  object-fit: cover;
+  object-position: 50% 8%;
+}
+@keyframes archIn {
+  from {
+    clip-path: inset(100% 0 0 0 round 999px 999px 32px 32px);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 999px 999px 32px 32px);
+  }
+}
+.hero-chip {
+  position: absolute;
+  z-index: 2;
+  left: -1rem;
+  bottom: 2.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 1.1rem 0.75rem 0.75rem;
+  background: #fff;
+  border-radius: 999px;
+  box-shadow: var(--sh-1);
+}
+.hero-chip .h {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--sage-dark);
+  color: #fff;
+}
+.hero-chip b {
+  display: block;
+  font-family: var(--f-display);
+  font-weight: 400;
+  line-height: 1.15;
+}
+.hero-chip span span {
+  font-size: 0.82rem;
+  color: var(--sage-ink);
+}
+@media (min-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 4rem;
+  }
+  .hero-fig {
+    order: 0;
+    width: 100%;
+    max-width: 27rem;
+    margin-right: 0;
+  }
+  .hero-creds {
+    grid-template-columns: repeat(3, auto);
+    gap: 1rem 1.6rem;
+    max-width: none;
+  }
+  .hero-creds li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/* =====================================================================
+   03 · Herzensanliegen B — Herz-Foto (на белом)
+   ===================================================================== */
+.hz {
+  background: #fff;
+  overflow: hidden;
+}
+.hz-grid {
+  display: grid;
+  gap: 4.5rem;
+  align-items: center;
+}
+.hz-pic {
+  position: relative;
+  width: min(78%, 22rem);
+  margin-inline: auto;
+  aspect-ratio: 1;
+}
+.hz-rings {
+  position: absolute;
+  inset: -14%;
+  width: 128%;
+  height: 128%;
+  color: var(--sage);
+  pointer-events: none;
+}
+.hz-rings circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  opacity: 0.38;
+  transform-origin: center;
+  animation: pulse 7s ease-in-out infinite;
+}
+.hz-rings circle:nth-child(2) {
+  animation-delay: -2.3s;
+  opacity: 0.25;
+}
+.hz-rings circle:nth-child(3) {
+  animation-delay: -4.6s;
+  opacity: 0.15;
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(0.94);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+.hz-disc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: var(--sh-2);
+}
+.hz-disc img {
+  object-fit: cover;
+  object-position: 50% 52%;
+  transform: scale(1.7);
+  transform-origin: 46% 56%;
+}
+.hz-txt {
+  display: grid;
+  gap: 1.4rem;
+}
+@media (min-width: 900px) {
+  .hz-grid {
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 5rem;
+  }
+  .hz-pic {
+    width: min(100%, 26rem);
+  }
+}
+
+/* =====================================================================
+   04 · Angebot B — Index (на cream, панель sage-soft)
+   ===================================================================== */
+.svc {
+  background: var(--cream);
+}
+.svc-head {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  max-width: 40rem;
+}
+.svc-wrap {
+  display: grid;
+  gap: 2rem;
+}
+.svc-list {
+  border-top: 1px solid var(--line);
+}
+.svc-item {
+  border-bottom: 1px solid var(--line);
+}
+.svc-btn {
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 100%;
+  min-height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 0.2rem;
+  text-align: left;
+  font-family: var(--f-display);
+  font-size: clamp(1.4rem, 1rem + 1.5vw, 2.1rem);
+  line-height: 1.15;
+  color: var(--ink-soft);
+  transition: color 0.3s, padding 0.5s var(--ease);
+}
+.svc-btn .ic {
+  color: var(--sage-dark);
+  transition: transform 0.5s var(--ease);
+}
+.svc-item.on .svc-btn {
+  color: var(--ink);
+  padding-left: 0.8rem;
+}
+.svc-item.on .svc-btn .ic {
+  transform: rotate(45deg);
+}
+.svc-d {
+  display: none;
+  padding: 0 0.8rem 1.4rem;
+  gap: 1rem;
+  justify-items: start;
+}
+.svc-item.on .svc-d {
+  display: grid;
+}
+.svc-panel {
+  display: none;
+}
+@media (min-width: 900px) {
+  .svc-wrap {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .svc-item .svc-d,
+  .svc-item.on .svc-d {
+    display: none;
+  }
+  .svc-item .svc-btn .ic {
+    display: none;
+  }
+  .svc-btn:hover {
+    color: var(--ink);
+  }
+  .svc-panel {
+    position: sticky;
+    top: 6.5rem;
+    display: grid;
+    gap: 1.2rem;
+    align-content: start;
+    justify-items: start;
+    background: var(--sage-soft);
+    border-radius: var(--r-xl);
+    padding: 2.5rem;
+    min-height: 22rem;
+  }
+  .svc-panel .big {
+    display: grid;
+    place-items: center;
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--sage-deep);
+  }
+  .svc-panel .big .ic {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+  .svc-panel .swap {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    animation: swap 0.6s var(--ease);
+  }
+  @keyframes swap {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+/* =====================================================================
+   05 · Kindergesundheit B — Tief-Salbei
+   ===================================================================== */
+.kg {
+  position: relative;
+  background: var(--sage-deep);
+  color: var(--cream);
+  overflow: hidden;
+}
+.kg-wm {
+  position: absolute;
+  right: -14%;
+  top: -12%;
+  width: min(62vw, 44rem);
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.08;
+  pointer-events: none;
+}
+.kg .wrap {
+  position: relative;
+}
+.kg-h {
+  max-width: 46rem;
+  color: var(--cream);
+  font-size: clamp(2rem, 1rem + 4vw, 3.9rem);
+}
+.kg-cols {
+  display: grid;
+  gap: 2rem;
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+}
+.kg-col {
+  display: grid;
+  gap: 0.8rem;
+  align-content: start;
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(247, 243, 235, 0.28);
+}
+.kg-col .ic {
+  color: var(--cream-dark);
+  width: 1.6rem;
+  height: 1.6rem;
+}
+.kg-col p {
+  color: color-mix(in srgb, var(--cream) 90%, transparent);
+}
+.kg-q {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  display: grid;
+  gap: 1rem;
+  padding: 1.6rem;
+  border-radius: var(--r-l);
+  background: rgba(247, 243, 235, 0.09);
+  max-width: 46rem;
+}
+.kg-q h3 {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.kg-q p {
+  color: color-mix(in srgb, var(--cream) 90%, transparent);
+  font-size: 1rem;
+}
+@media (min-width: 900px) {
+  .kg-cols {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  .kg-q {
+    padding: 2rem 2.4rem;
+  }
+}
+
+/* =====================================================================
+   06 · Konzept A — Orbit
+   ===================================================================== */
+.kz {
+  background: #fff;
+}
+.kz-grid {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+.kz-txt {
+  display: grid;
+  gap: 1.2rem;
+}
+.kz-sub {
+  text-wrap: balance;
+  font-family: var(--f-display);
+  color: var(--sage-dark);
+  font-size: clamp(1.2rem, 1rem + 1vw, 1.6rem);
+}
+.kz-fig {
+  display: grid;
+  gap: 2rem;
+  justify-items: center;
+}
+.orb {
+  position: relative;
+  width: min(100%, 30rem);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+.orb > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.orb .ring {
+  fill: none;
+  stroke: var(--sage);
+  stroke-width: 0.35;
+  stroke-dasharray: 0.8 1.8;
+  opacity: 0.65;
+  transform-origin: 50px 50px;
+  animation: spin 90s linear infinite;
+}
+.orb .ln {
+  stroke: var(--sage);
+  stroke-width: 0.35;
+  opacity: 0.35;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.orb .core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: 28%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--sage-dark);
+  color: var(--cream);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  box-shadow: var(--sh-2);
+}
+.orb .core b {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(1.4rem, 1rem + 2vw, 2.2rem);
+  line-height: 1;
+  display: block;
+}
+.orb .core small {
+  display: block;
+  font-size: 0.72rem;
+  opacity: 0.9;
+  margin-top: 0.25rem;
+  line-height: 1.2;
+  padding-inline: 0.5rem;
+}
+.orb .nd {
+  position: absolute;
+  translate: -50% -50%;
+  width: 6.6rem;
+  padding: 0.55rem 0.6rem;
+  text-align: center;
+  background: var(--cream);
+  border-radius: 24px;
+  box-shadow: var(--sh-1);
+  font-weight: 600;
+  font-size: 0.82rem;
+  line-height: 1.2;
+  color: var(--ink);
+  transition: background 0.3s, color 0.3s, transform 0.5s var(--ease);
+  cursor: default;
+}
+.orb .nd .ic {
+  display: block;
+  margin: 0 auto 0.15rem;
+  color: var(--sage-dark);
+  width: 1.2rem;
+  height: 1.2rem;
+  transition: color 0.3s;
+}
+.orb .nd:hover {
+  background: var(--sage-dark);
+  color: #fff;
+  transform: scale(1.06);
+}
+.orb .nd:hover .ic {
+  color: #fff;
+}
+.kz-cap {
+  font-family: var(--f-display);
+  font-size: clamp(1.3rem, 1rem + 1.4vw, 1.9rem);
+  line-height: 1.3;
+  color: var(--sage-dark);
+  text-align: center;
+  text-wrap: balance;
+  max-width: 28rem;
+}
+@media (min-width: 900px) {
+  .kz-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+  .orb .nd {
+    width: 8rem;
+    font-size: 0.92rem;
+  }
+}
+
+/* =====================================================================
+   07 · Über mich A — Kapitel
+   ===================================================================== */
+.ab {
+  background: var(--cream);
+}
+.ab-top {
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+.ab-grid {
+  display: grid;
+  gap: 2.5rem;
+}
+.ab-pic {
+  position: relative;
+  margin: 0 0 1rem;
+}
+.ab-pic .im {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--sh-2);
+}
+.ab-pic .im img {
+  object-fit: cover;
+  object-position: 50% 55%;
+}
+.ab-pic figcaption {
+  margin-top: 0.8rem;
+  font-size: 0.9rem;
+  color: var(--sage-ink);
+}
+.ab-read p {
+  color: var(--ink-soft);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+.ab-read p + p {
+  margin-top: 1.1rem;
+}
+.ab-ch {
+  display: grid;
+  gap: 0.8rem;
+  padding-block: 2rem;
+  border-top: 1px solid var(--line);
+}
+.ab-ch:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.ab-ch h3 {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: 1.55rem;
+  color: var(--sage-dark);
+}
+.ab-ch h3.yr {
+  color: var(--ink);
+  font-family: var(--f-display);
+  font-size: clamp(2.6rem, 1.5rem + 5vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.ab-read .ab-q {
+  margin-top: 1rem;
+  padding: 2rem;
+  border-radius: var(--r-l);
+  background: var(--sage-dark);
+  color: var(--cream);
+  max-width: none;
+  font-family: var(--f-display);
+  font-size: clamp(1.3rem, 1rem + 1.4vw, 1.85rem);
+  line-height: 1.32;
+  text-wrap: balance;
+}
+@media (min-width: 900px) {
+  .ab-grid {
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .ab-pic {
+    position: sticky;
+    top: 6.5rem;
+  }
+  .ab-read .ab-q {
+    padding: 2.6rem;
+  }
+}
+
+/* =====================================================================
+   08 · Werte B — Kiesel (на белом)
+   ===================================================================== */
+.val {
+  background: #fff;
+}
+.val-head {
+  text-align: center;
+  display: grid;
+  gap: 0.8rem;
+  justify-items: center;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+}
+.val-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.9rem;
+  max-width: 56rem;
+  margin-inline: auto;
+}
+.pb {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  font-family: var(--f-display);
+  line-height: 1.15;
+  padding: 1.2rem 1.8rem;
+  max-width: 100%;
+  transition: transform 0.6s var(--ease), background 0.3s;
+  cursor: default;
+}
+.pb:hover {
+  transform: translateY(-5px) rotate(-1deg);
+}
+.pb.s1 {
+  background: var(--sage-dark);
+  color: #fff;
+  border-radius: 62% 38% 55% 45% / 52% 58% 42% 48%;
+  font-size: clamp(1.4rem, 1rem + 2vw, 2.2rem);
+  padding: 2.3rem 2.8rem;
+}
+.pb.s2 {
+  background: var(--cream-dark);
+  border-radius: 44% 56% 40% 60% / 58% 42% 58% 42%;
+  font-size: clamp(1.2rem, 1rem + 1.4vw, 1.8rem);
+  padding: 1.6rem 2.2rem;
+}
+.pb.s3 {
+  background: var(--cream);
+  border-radius: 999px;
+  font-size: clamp(1.05rem, 1rem + 0.8vw, 1.4rem);
+}
+.pb.s4 {
+  background: var(--sage-soft);
+  color: var(--sage-deep);
+  border-radius: 56% 44% 62% 38% / 46% 60% 40% 54%;
+  font-size: clamp(1.3rem, 1rem + 1.7vw, 2rem);
+  padding: 1.9rem 2.5rem;
+}
+.pb.s5 {
+  background: var(--sage);
+  color: var(--ink);
+  border-radius: 999px;
+  /* ink на sage даёт 3.75:1 — достаточно только для крупного текста (≥24px) */
+  font-size: clamp(1.5rem, 1.1rem + 0.8vw, 1.7rem);
+}
+.pb.s6 {
+  background: var(--sand);
+  border-radius: 40% 60% 46% 54% / 60% 44% 56% 40%;
+  font-size: clamp(1.15rem, 1rem + 1.2vw, 1.65rem);
+  padding: 1.7rem 2.3rem;
+}
+
+/* =====================================================================
+   09 · Qualifikationen C — Lebenslauf (sand)
+   ===================================================================== */
+.ql {
+  background: var(--sand);
+}
+.ql-grid {
+  display: grid;
+  gap: 2.5rem;
+}
+.ql-l {
+  display: grid;
+  gap: 1.2rem;
+  align-content: start;
+}
+.ql-seals {
+  margin-top: 0.6rem;
+  display: grid;
+  gap: 1rem;
+}
+.ql-seals li {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.ql-seals .sl {
+  display: grid;
+  place-items: center;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  background: var(--sage-dark);
+  color: #fff;
+  flex: none;
+}
+.ql-seals .sl .ic {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+.ql-r {
+  display: grid;
+}
+.ql-e {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.1rem 1.3rem;
+  padding-block: 1.8rem;
+  border-top: 1px solid rgba(47, 53, 45, 0.16);
+}
+.ql-e:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.ql-e .ico {
+  background: #fff;
+}
+.ql-e h3 {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+.ql-e p {
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+@media (min-width: 900px) {
+  .ql-grid {
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 5rem;
+    align-items: start;
+  }
+  .ql-l {
+    position: sticky;
+    top: 6.5rem;
+  }
+}
+
+/* =====================================================================
+   10 · 7 Reflexionsfragen A — Kartendeck (sage-soft)
+   ===================================================================== */
+.rf {
+  background: var(--sage-soft);
+}
+.rf-grid {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+.rf-txt {
+  display: grid;
+  gap: 1.2rem;
+  justify-items: start;
+}
+.rf-deck {
+  position: relative;
+  padding-bottom: 1.6rem;
+}
+.rf-deck::before,
+.rf-deck::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 1.6rem;
+  border-radius: var(--r-xl);
+  background: var(--cream-dark);
+  transform-origin: bottom center;
+}
+.rf-deck::before {
+  transform: translateY(1.1rem) scale(0.95);
+  opacity: 0.6;
+}
+.rf-deck::after {
+  transform: translateY(0.55rem) scale(0.975);
+  background: var(--sand);
+}
+.rf-card {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-2);
+  padding: clamp(1.6rem, 4vw, 2.6rem);
+  min-height: 22rem;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1.5rem;
+  touch-action: pan-y;
+  user-select: none;
+}
+.rf-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--sage-ink);
+}
+.rf-top span:last-child {
+  white-space: nowrap;
+}
+.rf-top span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.rf-q {
+  align-self: center;
+  font-family: var(--f-display);
+  font-size: clamp(1.45rem, 1rem + 2vw, 2.3rem);
+  line-height: 1.22;
+  text-wrap: balance;
+}
+.rf-q.go-next {
+  animation: inN 0.6s var(--ease);
+}
+.rf-q.go-prev {
+  animation: inP 0.6s var(--ease);
+}
+@keyframes inN {
+  from {
+    opacity: 0;
+    transform: translateX(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes inP {
+  from {
+    opacity: 0;
+    transform: translateX(-26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.rf-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.rf-dots {
+  display: flex;
+  gap: 0.45rem;
+}
+.rf-dots i {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--cream-dark);
+  transition: width 0.5s var(--ease), background 0.3s;
+}
+.rf-dots i.on {
+  width: 1.7rem;
+  border-radius: 99px;
+  background: var(--sage-dark);
+}
+.rf-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+.rf-btns button {
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--sage-soft);
+  color: var(--sage-deep);
+  transition: background 0.25s, color 0.25s, transform 0.3s var(--ease);
+}
+.rf-btns button:hover {
+  background: var(--sage-dark);
+  color: #fff;
+}
+.rf-btns button:active {
+  transform: scale(0.94);
+}
+.rf-tip {
+  margin-top: 2.2rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+}
+.rf-tip .ic {
+  color: var(--sage-dark);
+  margin-top: 0.15rem;
+}
+.rf-tip h3 {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: 1.2rem;
+  margin-bottom: 0.35rem;
+}
+.rf-tip p {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+.rf-tip p + p {
+  margin-top: 0.7rem;
+}
+/* Запасной список: без JS виден вместо колоды, с JS — только для скринридеров и поисковиков */
+.rf-list {
+  display: grid;
+  gap: 0.9rem;
+  counter-reset: q;
+  padding-left: 0;
+}
+.rf-list li {
+  display: grid;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0.8rem;
+  align-items: start;
+}
+.rf-list li::before {
+  counter-increment: q;
+  content: counter(q);
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--sage-deep);
+  font-family: var(--f-display);
+}
+html:not(.js) .rf-deck {
+  display: none;
+}
+@media (min-width: 900px) {
+  .rf-grid {
+    grid-template-columns: 1fr 1.05fr;
+    gap: 5rem;
+  }
+}
+
+/* =====================================================================
+   11 · Kontakt B — Satzformular (cream, панель sage-soft)
+   ===================================================================== */
+.ct {
+  background: var(--cream);
+  padding: clamp(0.75rem, 2.5vw, 1.5rem);
+}
+.ct-panel {
+  max-width: 96rem;
+  margin-inline: auto;
+  background: var(--sage-soft);
+  border-radius: var(--r-xl);
+  padding: clamp(2.5rem, 7vw, 5.5rem) clamp(1.25rem, 5vw, 4rem);
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+}
+.ct-inner {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  width: 100%;
+  max-width: 66rem; /* = ширина контента .wrap, чтобы совпадать с остальными секциями */
+  margin-inline: auto;
+}
+.ct-head {
+  display: grid;
+  gap: 1rem;
+  max-width: 44rem;
+}
+.ct-form {
+  display: grid;
+  gap: 1.6rem;
+  max-width: 58rem;
+}
+.sent {
+  font-family: var(--f-display);
+  font-size: clamp(1.45rem, 1rem + 2.4vw, 2.6rem);
+  line-height: 1.5;
+  color: var(--ink);
+  text-wrap: pretty;
+}
+.sent input,
+.sent textarea {
+  font: inherit;
+  color: var(--sage-deep);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid color-mix(in srgb, var(--sage-dark) 45%, transparent);
+  padding: 0 0.1em;
+  width: min(100%, 8.5em);
+  border-radius: 0;
+  transition: border-color 0.3s, background 0.3s;
+}
+.sent input.w {
+  width: min(100%, 11em);
+}
+.sent textarea {
+  display: block;
+  width: 100%;
+  margin-top: 0.4rem;
+  min-height: 6.5em;
+  resize: vertical;
+  border: 2px solid color-mix(in srgb, var(--sage-dark) 35%, transparent);
+  border-radius: var(--r-m);
+  padding: 0.6em 0.8em;
+  line-height: 1.4;
+}
+.sent input:focus-visible,
+.sent textarea:focus-visible {
+  outline: none;
+  border-color: var(--sage-dark);
+  background: rgba(255, 255, 255, 0.6);
+}
+.sent input::placeholder,
+.sent textarea::placeholder {
+  color: var(--sage-ink); /* ≥4.5:1 на sage-soft */
+}
+.sent [aria-invalid="true"] {
+  border-color: var(--err);
+}
+.ct-err {
+  margin-top: 0.4rem;
+  color: var(--err);
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.chk {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+.chk input {
+  margin-top: 0.15rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--sage-dark);
+  flex: none;
+}
+.chk input[aria-invalid="true"] {
+  outline: 2px solid var(--err);
+  outline-offset: 2px;
+}
+.thanks {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: start;
+  padding-block: 2rem;
+}
+.thanks .ok {
+  display: grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 50%;
+  background: var(--sage-dark);
+  color: #fff;
+}
+.ct-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+.ct-chips a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 1.1rem 0.65rem 0.85rem;
+  border-radius: 999px;
+  background: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  overflow-wrap: anywhere;
+  transition: background 0.3s, transform 0.4s var(--ease);
+}
+.ct-chips a:hover {
+  background: var(--cream);
+  transform: translateY(-2px);
+}
+.ct-chips .ic {
+  color: var(--sage-dark);
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+/* =====================================================================
+   12 · Footer A — Tief-Salbei
+   ===================================================================== */
+.ft {
+  background: var(--sage-deep);
+  color: var(--cream);
+  padding-block: clamp(3rem, 7vw, 5rem) calc(1.6rem + env(safe-area-inset-bottom));
+}
+.ft a {
+  text-decoration: none;
+}
+.ft-cols {
+  display: grid;
+  gap: 2.2rem;
+}
+.ft-brand {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+  justify-items: start;
+}
+.ft-brand img {
+  width: 5.5rem;
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.92;
+}
+.ft-brand b {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1.2;
+}
+.ft-brand p {
+  color: color-mix(in srgb, var(--cream) 88%, transparent);
+  font-size: 0.98rem;
+}
+.ft h3 {
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--cream-dark);
+  margin-bottom: 0.9rem;
+}
+.ft ul {
+  display: grid;
+  gap: 0.3rem;
+}
+.ft li a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  color: color-mix(in srgb, var(--cream) 94%, transparent);
+  overflow-wrap: anywhere;
+  transition: color 0.25s, transform 0.4s var(--ease);
+}
+.ft li a:hover {
+  color: #fff;
+  transform: translateX(3px);
+}
+.ft li .ic {
+  color: var(--cream-dark);
+  width: 1.1rem;
+  height: 1.1rem;
+}
+.ft-disc {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.9rem;
+  padding: 1.2rem 1.3rem;
+  border-radius: var(--r-m);
+  background: rgba(247, 243, 235, 0.09);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--cream) 92%, transparent);
+}
+.ft-disc .ic {
+  color: var(--cream-dark);
+  margin-top: 0.15rem;
+}
+.ft-bot {
+  margin-top: 1.4rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.6rem;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--cream) 85%, transparent);
+}
+.ft-bot nav {
+  display: flex;
+  gap: 1.4rem;
+}
+.ft-bot nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: inherit;
+}
+.ft-bot nav a:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+@media (min-width: 760px) {
+  .ft-cols {
+    grid-template-columns: 1.3fr 1fr 1.2fr;
+    gap: 3rem;
+  }
+}
+
+/* =====================================================================
+   Impressum / Datenschutz — спокойная страница чтения
+   ===================================================================== */
+.legal {
+  background: var(--cream);
+  padding-top: calc(5.2rem + env(safe-area-inset-top));
+}
+.legal-in {
+  padding-block: clamp(2rem, 5vw, 4rem) clamp(4rem, 9vw, 7rem);
+  max-width: 48rem;
+}
+.legal-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  color: var(--sage-ink);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+.legal-back:hover {
+  color: var(--ink);
+}
+.legal h1 {
+  margin-top: 1rem;
+  font-size: clamp(1.8rem, 0.6rem + 5vw, 3.4rem);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+.legal-secs {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  display: grid;
+  gap: 2.2rem;
+}
+.legal-sec {
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--line);
+}
+.legal-sec h2 {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(1.25rem, 1rem + 0.9vw, 1.5rem);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.legal-sec div {
+  margin-top: 0.8rem;
+  display: grid;
+  gap: 0.6rem;
+}
+.legal-sec p {
+  color: var(--ink-soft);
+  max-width: 62ch;
+  overflow-wrap: anywhere;
+}
