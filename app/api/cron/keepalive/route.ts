@@ -14,10 +14,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ ok: false, error: "db not configured" }, { status: 503 });
   }
 
-  const { error } = await getDb().from("settings").select("key", { head: true, count: "exact" }).limit(1);
+  const db = getDb();
+  const { error } = await db.from("settings").select("key", { head: true, count: "exact" }).limit(1);
   if (error) {
     console.error("Keepalive fehlgeschlagen", error.message);
     return NextResponse.json({ ok: false }, { status: 500 });
+  }
+
+  // Nur echte Cron-Läufe von Vercel protokollieren – so lässt sich später prüfen,
+  // ob der tägliche Lauf wirklich stattfindet.
+  if (request.headers.get("user-agent")?.startsWith("vercel-cron")) {
+    const { error: logError } = await db
+      .from("settings")
+      .upsert({ key: "keepalive_last_run", value: { at: new Date().toISOString() }, updated_at: new Date().toISOString() });
+    if (logError) console.error("Keepalive: Protokoll fehlgeschlagen", logError.message);
   }
   return NextResponse.json({ ok: true });
 }
