@@ -1,4 +1,4 @@
-import { getDb, IMAGE_BUCKET } from "@/lib/supabase";
+import { getDb, IMAGE_BUCKET, supabaseUrl } from "@/lib/supabase";
 import { listPosts } from "@/lib/posts";
 import type { Post, PostInput } from "@/types/post";
 
@@ -26,7 +26,7 @@ export async function uploadImage(
 
 // Pfad im Bucket, wenn die URL zu unserem eigenen Speicher gehört – sonst null.
 function ownPath(url: string): string | null {
-  const base = process.env.SUPABASE_URL;
+  const base = supabaseUrl();
   if (!base) return null;
   const prefix = `${base.replace(/\/$/, "")}/storage/v1/object/public/${IMAGE_BUCKET}/`;
   return url.startsWith(prefix) ? decodeURIComponent(url.slice(prefix.length)) : null;

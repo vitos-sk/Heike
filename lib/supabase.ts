@@ -4,7 +4,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 let client: SupabaseClient | null = null;
 
 // Die Vercel-Integration setzt NEXT_PUBLIC_SUPABASE_URL, lokal/manuell wird SUPABASE_URL benutzt.
-function supabaseUrl(): string | undefined {
+export function supabaseUrl(): string | undefined {
   return process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 }
 
