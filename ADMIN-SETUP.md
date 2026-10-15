@@ -6,7 +6,7 @@
 
 | Переменная | Откуда взять |
 |---|---|
-| `SUPABASE_URL` | `https://utwfirqifdzvxmtbvdxy.supabase.co` |
+| `SUPABASE_URL` | `https://xcrwonynkaojvaivkixv.supabase.co` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API → **service_role** (секретный, только на сервере!) |
 | `RESEND_API_KEY` | resend.com → API Keys |
 | `CONTACT_EMAIL_FROM` | адрес на подтверждённом в Resend домене, например `Heike Schaub <kontakt@домен>` |
