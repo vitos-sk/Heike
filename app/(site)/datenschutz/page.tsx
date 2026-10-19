@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { datenschutz } from "@/lib/placeholder-data";
+import { datenschutzSections } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title: "Datenschutzerklärung",
 };
 
 export default function DatenschutzPage() {
-  return <LegalPage heading={datenschutz.heading} sections={datenschutz.sections} />;
+  return <LegalPage heading="Datenschutzerklärung" sections={datenschutzSections()} />;
 }

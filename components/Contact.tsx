@@ -115,7 +115,7 @@ export default function Contact() {
               <h3 className="t-h3">Danke dir!</h3>
               <p className="t-body">
                 Deine Nachricht ist angekommen. Ich melde mich persönlich bei dir.
-                {sentWithQuestions && " Deine Reflexionsfragen bekommst du per E-Mail."}
+                {sentWithQuestions && " Ich schicke dir die Fragen persönlich."}
               </p>
             </div>
           ) : (
@@ -195,7 +195,7 @@ export default function Contact() {
                   checked={wantsQuestions}
                   onChange={(e) => setWantsQuestions(e.target.checked)}
                 />
-                <span>Ich möchte außerdem die 7 Reflexionsfragen per E-Mail erhalten.</span>
+                <span>Ich möchte außerdem die 7 Reflexionsfragen erhalten (Heike schickt sie mir persönlich).</span>
               </label>
 
               <div>

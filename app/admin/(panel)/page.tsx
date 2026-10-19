@@ -5,6 +5,7 @@ import { listPosts } from "@/lib/posts";
 import { getAdminAccount } from "@/lib/adminAccount";
 import { getQuestionnaire } from "@/lib/questionnaire";
 import { isMailConfigured } from "@/lib/mail";
+import { missingLegalFields } from "@/lib/legal";
 import { formatDateTime, formatRelative } from "@/lib/postDate";
 
 export const metadata = { title: "Übersicht" };
@@ -36,6 +37,7 @@ export default async function OverviewPage() {
   const recentPosts = [...posts].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 3);
 
   const mailOk = isMailConfigured();
+  const legalMissing = missingLegalFields();
   const dateLabel = new Intl.DateTimeFormat("de-DE", {
     weekday: "long",
     day: "numeric",
@@ -160,6 +162,17 @@ export default async function OverviewPage() {
           Website ansehen
         </a>
       </section>
+
+      {legalMissing.length > 0 && (
+        <section className="adm-status" aria-label="Hinweis Impressum">
+          <ul>
+            <li className="warn">
+              <CircleAlert className="ic" strokeWidth={1.6} aria-hidden="true" />
+              Impressum und Datenschutzerklärung sind noch nicht vollständig. Es fehlen: {legalMissing.join(", ")}.
+            </li>
+          </ul>
+        </section>
+      )}
 
       {!mailOk && (
         <section className="adm-status" aria-label="Hinweis">

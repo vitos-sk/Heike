@@ -21,6 +21,10 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ ok: false }, { status: 500 });
   }
 
+  // Abgelaufene Rate-Limit-Zähler (enthalten Hashwerte von IP-Adressen) täglich entfernen.
+  const { error: cleanError } = await db.from("rate_limits").delete().lt("expires_at", new Date().toISOString());
+  if (cleanError) console.error("Keepalive: Aufräumen fehlgeschlagen", cleanError.message);
+
   // Nur echte Cron-Läufe von Vercel protokollieren – so lässt sich später prüfen,
   // ob der tägliche Lauf wirklich stattfindet.
   if (request.headers.get("user-agent")?.startsWith("vercel-cron")) {

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import LegalPage from "@/components/LegalPage";
-import { impressum } from "@/lib/placeholder-data";
+import { impressumSections } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title: "Impressum",
 };
 
 export default function ImpressumPage() {
-  return <LegalPage heading={impressum.heading} sections={impressum.sections} />;
+  return <LegalPage heading="Impressum" sections={impressumSections()} />;
 }

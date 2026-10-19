@@ -1625,3 +1625,18 @@ html:not(.js) .rf-deck {
   max-width: 62ch;
   overflow-wrap: anywhere;
 }
+
+.legal-sec ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--ink-soft);
+  max-width: 62ch;
+  display: grid;
+  gap: 0.3rem;
+}
+.legal-sec a {
+  color: var(--sage-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+}

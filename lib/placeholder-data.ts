@@ -198,90 +198,9 @@ export const contact = {
 export const footer = {
   copyright: "© Heike Schaub · Gesundheit mit Herz · Für Menschen und Familien",
   disclaimer:
-    "Hinweis: Meine Inhalte und Beratungen ersetzen keine ärztliche Diagnose oder Behandlung. Bei gesundheitlichen Beschwerden wende dich bitte an eine Ärztin oder einen Arzt.",
+    "Hinweis: Meine Inhalte und Beratungen ersetzen keine ärztliche Diagnose oder Behandlung. Bei gesundheitlichen Beschwerden wende dich bitte an eine Ärztin oder einen Arzt. Ich bin selbstständige Lifeplus Partnerin; Links zu meinem Shop sind Werbelinks.",
   links: [
     { label: "Impressum", href: "/impressum" },
     { label: "Datenschutz", href: "/datenschutz" },
-  ],
-};
-
-export const impressum = {
-  heading: "Impressum",
-  sections: [
-    {
-      title: "Angaben gemäß § 5 TMG",
-      lines: ["[Name/Firma]", "[Adresse]", "[PLZ, Ort]", "[Land]"],
-    },
-    {
-      title: "Kontakt",
-      lines: ["Telefon: 0173 7214830", "E-Mail: Schaub-heike@gmx.de"],
-    },
-    {
-      title: "Umsatzsteuer-ID",
-      lines: [
-        "Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz: [USt-IdNr.]",
-      ],
-    },
-    {
-      title: "Berufsbezeichnung und berufsrechtliche Regelungen",
-      lines: ["[Berufsbezeichnung]", "[Zuständige Kammer]", "[Verliehen in: Land]"],
-    },
-    {
-      title: "Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV",
-      lines: ["[Name/Firma]", "[Adresse]"],
-    },
-    {
-      title: "Streitschlichtung",
-      lines: [
-        "Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: [Link zur OS-Plattform].",
-        "Unsere E-Mail-Adresse finden Sie oben im Impressum.",
-        "Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.",
-      ],
-    },
-  ],
-};
-
-export const datenschutz = {
-  heading: "Datenschutzerklärung",
-  sections: [
-    {
-      title: "1. Datenschutz auf einen Blick",
-      lines: [
-        "[Allgemeine Hinweise zum Datenschutz]",
-        "Verantwortliche Stelle: [Name/Firma], [Adresse], E-Mail: [E-Mail], Telefon: [Telefon]",
-      ],
-    },
-    {
-      title: "2. Allgemeine Hinweise und Pflichtinformationen",
-      lines: [
-        "[Hinweise zum Datenschutz gemäß DSGVO]",
-        "Verantwortlicher: [Name/Firma], [Adresse]",
-      ],
-    },
-    {
-      title: "3. Datenerfassung auf dieser Website",
-      lines: [
-        "[Beschreibung, welche Daten beim Besuch der Website erfasst werden, z. B. Server-Log-Dateien]",
-      ],
-    },
-    {
-      title: "4. Kontaktformular",
-      lines: [
-        "[Hinweis, dass bei Nutzung des Kontaktformulars Name, E-Mail-Adresse und Nachricht gespeichert werden]",
-        "Rechtsgrundlage: [Art. 6 Abs. 1 lit. b/f DSGVO]",
-        "Speicherdauer: [Angabe zur Speicherdauer]",
-      ],
-    },
-    {
-      title: "5. Ihre Rechte",
-      lines: [
-        "Sie haben jederzeit das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit sowie Widerspruch.",
-        "Bei Fragen wenden Sie sich an: [E-Mail]",
-      ],
-    },
-    {
-      title: "6. Hosting",
-      lines: ["[Angaben zum Hosting-Anbieter, sofern zutreffend]"],
-    },
   ],
 };
