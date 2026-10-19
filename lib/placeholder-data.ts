@@ -154,11 +154,6 @@ export const qualifications = {
 
 export const reflection = {
   eyebrow: "Dein persönlicher Gesundheits-Check-in",
-  heading: "7 Reflexionsfragen für mehr Gesundheit und Lebensqualität",
-  intro: [
-    "Gesundheit beginnt oft mit einem ehrlichen Blick auf das eigene Leben. Diese sieben Fragen laden dich dazu ein, kurz innezuhalten, deine Bedürfnisse bewusster wahrzunehmen und herauszufinden, was dir und deiner Familie wirklich guttut.",
-    "Keine To-do-Liste. Kein Anspruch auf Perfektion. Nur sieben persönliche Fragen, die dir neue Impulse für mehr Energie, Wohlbefinden und gesunde Gewohnheiten schenken können.",
-  ],
   questions: [
     "Woran merkst du, dass es dir körperlich und innerlich wirklich gut geht?",
     "Was schenkt dir im Alltag Energie – und was kostet dich besonders viel Kraft?",
@@ -168,7 +163,6 @@ export const reflection = {
     "Welche gesunden Gewohnheiten möchtest du deinen Kindern mit auf den Weg geben?",
     "Was bedeutet Lebensqualität ganz persönlich für dich – und welchen ersten Schritt möchtest du dafür gehen?",
   ],
-  buttonText: "Hol dir deine 7 Reflexionsfragen",
   tip: {
     heading: "Mein Tipp",
     text: "Nimm dir für jede Frage einen ruhigen Moment. Du musst nicht sofort auf alles eine Antwort haben. Manchmal entsteht Klarheit erst dann, wenn wir uns erlauben, aufmerksam hinzuhören.\n\nDenn Gesundheit braucht keine Perfektion. Sie darf in vielen kleinen Schritten wachsen – in deinem eigenen Tempo und passend zu deinem Leben.",

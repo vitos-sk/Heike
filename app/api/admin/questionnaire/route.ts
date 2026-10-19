@@ -22,6 +22,7 @@ export async function PUT(request: Request) {
   try {
     const saved = await saveQuestionnaire(input);
     revalidatePath("/admin", "layout");
+    revalidatePath("/");
     return NextResponse.json(saved);
   } catch (error) {
     console.error("Vorlage speichern fehlgeschlagen:", error);

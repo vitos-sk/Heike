@@ -134,7 +134,7 @@ export default function SubmissionDetail({
             <MailQuestion className="ic" strokeWidth={1.6} aria-hidden="true" />
           </div>
           <div className="adm-box-txt">
-            <h3>Die 7 Reflexionsfragen</h3>
+            <h3>Die Reflexionsfragen</h3>
             <p>
               {submission.questionsSentAt
                 ? `Gesendet am ${formatDateTime(submission.questionsSentAt)}.`

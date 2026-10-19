@@ -9,11 +9,26 @@ import Qualifications from "@/components/Qualifications";
 import ReflectionCta from "@/components/ReflectionCta";
 import Contact from "@/components/Contact";
 import News from "@/components/News";
+import { getQuestionnaire } from "@/lib/questionnaire";
+import { reflection } from "@/lib/placeholder-data";
 
-// Neuigkeiten kommen aus der Datenbank: alle 5 Minuten neu, sofort beim Speichern im Admin.
+// Neuigkeiten und Reflexionsfragen kommen aus der Datenbank: alle 5 Minuten neu, sofort beim Speichern im Admin.
 export const revalidate = 300;
 
-export default function Home() {
+// Die Fragen stammen aus dem Admin („Fragen-Mail“); ohne Datenbank gilt die Standardliste.
+async function loadQuestions(): Promise<string[]> {
+  try {
+    const { questions } = await getQuestionnaire();
+    return questions.length > 0 ? questions : reflection.questions;
+  } catch (error) {
+    console.error("Reflexionsfragen konnten nicht geladen werden", error);
+    return reflection.questions;
+  }
+}
+
+export default async function Home() {
+  const questions = await loadQuestions();
+
   return (
     <main id="main">
       <Hero />
@@ -25,8 +40,8 @@ export default function Home() {
       <Values />
       <Qualifications />
       <News />
-      <ReflectionCta />
-      <Contact />
+      <ReflectionCta questions={questions} />
+      <Contact questionCount={questions.length} />
     </main>
   );
 }

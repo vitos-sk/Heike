@@ -6,13 +6,20 @@ import { usePathname } from "next/navigation";
 import { ArrowRight, ArrowUpRight, Mail, Menu, Phone, X } from "lucide-react";
 import { contact, header } from "@/lib/placeholder-data";
 
-const SECTION_IDS = ["home", "services", "kindergesundheit", "konzept", "about", "contact"];
+const SECTION_IDS = ["home", "services", "kindergesundheit", "konzept", "about", "aktuelles", "contact"];
 const telHref = `tel:+49${contact.phone.replace(/^0/, "").replace(/\s/g, "")}`;
 
-export default function Header() {
+export default function Header({ hasNews = false }: { hasNews?: boolean }) {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const base = isHome ? "" : "/";
+
+  // „Aktuelles“ erscheint im Menü nur, wenn es auf der Startseite den Bereich gibt.
+  const navItems = hasNews
+    ? header.nav.flatMap((item) =>
+        item.href === "#contact" ? [{ label: "Aktuelles", href: "#aktuelles" }, item] : [item],
+      )
+    : header.nav;
 
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -84,7 +91,7 @@ export default function Header() {
           </a>
 
           <nav className="hdr-nav" aria-label="Hauptnavigation">
-            {header.nav.map((item) => {
+            {navItems.map((item) => {
               const id = item.href.slice(1);
               const on = active === id;
               return (
@@ -128,7 +135,7 @@ export default function Header() {
       {/* Отдельным элементом: у header при прокрутке есть backdrop-filter, он сломал бы position: fixed */}
       <div className="hdr-sheet" id="mobile-menu">
         <nav aria-label="Mobil">
-          {header.nav.map((item) => (
+          {navItems.map((item) => (
             <a key={item.href} href={`${base}${item.href}`} onClick={close}>
               {item.label}
               <ArrowUpRight className="ic" strokeWidth={1.6} aria-hidden="true" />

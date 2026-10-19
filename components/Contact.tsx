@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { reflectionTexts } from "@/lib/reflection";
 import { Check, Facebook, Instagram, Mail, Phone, Send, ShoppingBag } from "lucide-react";
 import { contact } from "@/lib/placeholder-data";
 import { HONEYPOT_FIELD } from "@/lib/honeypot";
@@ -20,7 +21,7 @@ const telHref = `tel:+49${contact.phone.replace(/^0/, "").replace(/\s/g, "")}`;
 
 export const WANT_QUESTIONS_EVENT = "heike:want-questions";
 
-export default function Contact() {
+export default function Contact({ questionCount = 7 }: { questionCount?: number }) {
   const [errors, setErrors] = useState<Errors>({});
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
@@ -195,7 +196,7 @@ export default function Contact() {
                   checked={wantsQuestions}
                   onChange={(e) => setWantsQuestions(e.target.checked)}
                 />
-                <span>Ich möchte außerdem die 7 Reflexionsfragen erhalten (Heike schickt sie mir persönlich).</span>
+                <span>Ich möchte außerdem {reflectionTexts(questionCount).optionLabel} erhalten (Heike schickt sie mir persönlich).</span>
               </label>
 
               <div>

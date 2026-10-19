@@ -89,7 +89,7 @@ export default function QuestionnaireForm({
       <header className="adm-head">
         <h1 className="adm-h1">Fragen-Mail</h1>
         <p className="adm-sub">
-          Diese E-Mail bekommen Besucher:innen, die „Hol dir deine 7 Reflexionsfragen“ anfordern. Rechts siehst du, wie sie ankommt.
+          Diese E-Mail bekommen Besucher:innen, die „Hol dir deine 7 Reflexionsfragen“ anfordern. Rechts siehst du, wie sie ankommt. Dieselben Fragen erscheinen auch auf deiner Startseite im Bereich „Reflexionsfragen“.
         </p>
       </header>
 

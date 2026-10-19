@@ -3,11 +3,12 @@
 import { useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Heart, Lightbulb } from "lucide-react";
 import { reflection } from "@/lib/placeholder-data";
+import { reflectionTexts } from "@/lib/reflection";
 import { WANT_QUESTIONS_EVENT } from "@/components/Contact";
 
-const total = reflection.questions.length;
-
-export default function ReflectionCta() {
+export default function ReflectionCta({ questions }: { questions: string[] }) {
+  const total = questions.length;
+  const texts = reflectionTexts(total);
   const [index, setIndex] = useState(0);
   const [dir, setDir] = useState<1 | -1 | 0>(0);
   const startX = useRef<number | null>(null);
@@ -25,9 +26,9 @@ export default function ReflectionCta() {
         <div className="rf-grid">
           <div className="rf-txt">
             <h2 className="t-h2 rv" id="rf-h">
-              {reflection.heading}
+              {texts.heading}
             </h2>
-            {reflection.intro.map((text, i) => (
+            {texts.intro.map((text, i) => (
               <p key={i} className="t-body rv">
                 {text}
               </p>
@@ -37,15 +38,15 @@ export default function ReflectionCta() {
               href="#contact"
               onClick={() => window.dispatchEvent(new Event(WANT_QUESTIONS_EVENT))}
             >
-              {reflection.buttonText}
+              {texts.buttonText}
               <ArrowRight className="ic" strokeWidth={1.6} aria-hidden="true" />
             </a>
           </div>
 
           <div>
-            {/* Все 7 вопросов всегда в DOM: без JS виден как список, с JS — только для скринридеров и поисковиков */}
-            <ol className="rf-list sr-only-js" aria-label="Alle sieben Reflexionsfragen">
-              {reflection.questions.map((q) => (
+            {/* Все вопросы всегда в DOM: без JS виден как список, с JS — только для скринридеров и поисковиков */}
+            <ol className="rf-list sr-only-js" aria-label="Alle Reflexionsfragen">
+              {questions.map((q) => (
                 <li key={q}>{q}</li>
               ))}
             </ol>
@@ -80,11 +81,11 @@ export default function ReflectionCta() {
                   className={`rf-q${dir === 1 ? " go-next" : dir === -1 ? " go-prev" : ""}`}
                   aria-live="polite"
                 >
-                  {reflection.questions[index]}
+                  {questions[index]}
                 </p>
                 <div className="rf-nav">
                   <div className="rf-dots" aria-hidden="true">
-                    {reflection.questions.map((_, i) => (
+                    {questions.map((_, i) => (
                       <i key={i} className={i === index ? "on" : undefined} />
                     ))}
                   </div>

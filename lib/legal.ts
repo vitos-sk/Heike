@@ -117,7 +117,7 @@ function rawDatenschutz(): LegalSection[] {
     {
       title: "3. Kontaktformular und Nachrichten",
       lines: [
-        "Wenn Sie mir über das Kontaktformular schreiben, verarbeite ich die Angaben, die Sie eingeben: Name, E-Mail-Adresse und Ihre Nachricht, außerdem Datum und Uhrzeit der Anfrage und – falls Sie es ankreuzen – den Wunsch, die 7 Reflexionsfragen zu erhalten. Ich nutze diese Daten ausschließlich, um Ihre Anfrage zu beantworten.",
+        "Wenn Sie mir über das Kontaktformular schreiben, verarbeite ich die Angaben, die Sie eingeben: Name, E-Mail-Adresse und Ihre Nachricht, außerdem Datum und Uhrzeit der Anfrage und – falls Sie es ankreuzen – den Wunsch, die Reflexionsfragen zu erhalten. Ich nutze diese Daten ausschließlich, um Ihre Anfrage zu beantworten.",
         "Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, wenn Ihre Anfrage mit einem Vertrag oder vorvertraglichen Maßnahmen zusammenhängt, sonst Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse, Anfragen zu beantworten). Mit dem Häkchen bei der Datenschutzerklärung bestätigen Sie, dass Sie diese gelesen haben. Die Angabe ist freiwillig; ohne sie kann ich Ihre Anfrage allerdings nicht beantworten.",
         "Speicherdauer: Ich lösche Ihre Nachricht, sobald Ihre Anfrage abschließend bearbeitet ist und die Daten nicht mehr gebraucht werden, in der Regel spätestens 12 Monate danach. Gesetzliche Aufbewahrungspflichten (zum Beispiel für Geschäftsbriefe nach Handels- und Steuerrecht) bleiben unberührt.",
       ],
@@ -143,9 +143,9 @@ function rawDatenschutz(): LegalSection[] {
       ],
     },
     {
-      title: "7. Die 7 Reflexionsfragen",
+      title: "7. Die Reflexionsfragen",
       lines: [
-        "Wenn Sie im Formular ankreuzen, dass Sie die 7 Reflexionsfragen erhalten möchten, schicke ich Ihnen diese persönlich an die angegebene E-Mail-Adresse. Ihre E-Mail-Adresse verwende ich dafür und für die Beantwortung Ihrer Nachricht, nicht für einen Newsletter und nicht für Werbung, solange Sie dem nicht ausdrücklich zugestimmt haben.",
+        "Wenn Sie im Formular ankreuzen, dass Sie die Reflexionsfragen erhalten möchten, schicke ich Ihnen diese persönlich an die angegebene E-Mail-Adresse. Ihre E-Mail-Adresse verwende ich dafür und für die Beantwortung Ihrer Nachricht, nicht für einen Newsletter und nicht für Werbung, solange Sie dem nicht ausdrücklich zugestimmt haben.",
         "Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) durch das Ankreuzen. Sie können sie jederzeit mit Wirkung für die Zukunft widerrufen: eine kurze Nachricht an die oben genannte E-Mail-Adresse genügt.",
       ],
     },
