@@ -12,7 +12,7 @@ import PostPreview from "@/components/admin/PostPreview";
 import { slugify } from "@/lib/slug";
 import { excerptFromBlocks } from "@/lib/postContent";
 import { toDateTimeLocalValue } from "@/lib/postDate";
-import { EXCERPT_MAX_LENGTH, POST_TYPE_LABELS, type Post, type PostBlock, type PostType } from "@/types/post";
+import { EXCERPT_MAX_LENGTH, type Post, type PostBlock, type PostType } from "@/types/post";
 
 type Form = {
   type: PostType;
@@ -34,8 +34,6 @@ type Form = {
 };
 
 type SlugState = { state: "idle" | "checking" | "free" | "taken"; suggestion?: string };
-
-const TYPES: PostType[] = ["article", "announcement", "event"];
 
 function fromPost(post: Post | undefined): Form {
   return {
@@ -290,15 +288,7 @@ export default function PostForm({ initialPost }: { initialPost?: Post }) {
       )}
 
       <section className="adm-card">
-        <h2 className="adm-h3">Grundlagen</h2>
-
-        <div className="adm-seg adm-seg--wide" role="radiogroup" aria-label="Art des Beitrags">
-          {TYPES.map((t) => (
-            <button key={t} type="button" role="radio" aria-checked={form.type === t} className={form.type === t ? "on" : undefined} onClick={() => set("type", t)}>
-              {POST_TYPE_LABELS[t]}
-            </button>
-          ))}
-        </div>
+        <h2 className="adm-h3">Titel und Kurztext</h2>
 
         <label className="adm-lbl">
           Titel
@@ -306,39 +296,7 @@ export default function PostForm({ initialPost }: { initialPost?: Post }) {
         </label>
 
         <label className="adm-lbl">
-          Link-Adresse
-          <span className="adm-slug">
-            <span className="pre">/blog/</span>
-            <input
-              value={form.slug}
-              onChange={(e) => {
-                setForm((prev) => ({ ...prev, slug: e.target.value, slugTouched: true }));
-                setSaved(false);
-              }}
-              onBlur={() => set("slug", slugify(form.slug))}
-              aria-describedby="slug-state"
-            />
-          </span>
-          <span id="slug-state" className={`adm-slug-state ${slugCheck.state}`} aria-live="polite">
-            {slugCheck.state === "checking" && "Wird geprüft …"}
-            {slugCheck.state === "free" && (
-              <>
-                <Check className="ic" strokeWidth={1.8} aria-hidden="true" /> Frei
-              </>
-            )}
-            {slugCheck.state === "taken" && (
-              <>
-                Schon vergeben.{" "}
-                <button type="button" className="adm-linkbtn" onClick={() => set("slug", slugCheck.suggestion ?? form.slug)}>
-                  „{slugCheck.suggestion}“ nehmen
-                </button>
-              </>
-            )}
-          </span>
-        </label>
-
-        <label className="adm-lbl">
-          Kurzbeschreibung <span className="adm-count">{form.excerpt.length}/{EXCERPT_MAX_LENGTH}</span>
+          Kurzbeschreibung (optional) <span className="adm-count">{form.excerpt.length}/{EXCERPT_MAX_LENGTH}</span>
           <textarea
             rows={2}
             maxLength={EXCERPT_MAX_LENGTH}
@@ -419,14 +377,48 @@ export default function PostForm({ initialPost }: { initialPost?: Post }) {
       </section>
 
       <section className="adm-card">
-        <h2 className="adm-h3">Veröffentlichung</h2>
+        <h2 className="adm-h3">Sichtbar auf der Website?</h2>
         <div className="adm-seg adm-seg--wide" role="radiogroup" aria-label="Status">
           {(["draft", "published"] as const).map((s) => (
             <button key={s} type="button" role="radio" aria-checked={form.status === s} className={form.status === s ? "on" : undefined} onClick={() => set("status", s)}>
-              {s === "draft" ? "Entwurf – nur für dich" : "Veröffentlicht – für alle sichtbar"}
+              {s === "draft" ? "Entwurf – nur für mich sichtbar" : "Veröffentlicht – auf der Website sichtbar"}
             </button>
           ))}
         </div>
+
+        <details className="adm-more-opts">
+          <summary>Weitere Einstellungen (meist nicht nötig)</summary>
+        <label className="adm-lbl">
+          Link-Adresse
+          <span className="adm-slug">
+            <span className="pre">/blog/</span>
+            <input
+              value={form.slug}
+              onChange={(e) => {
+                setForm((prev) => ({ ...prev, slug: e.target.value, slugTouched: true }));
+                setSaved(false);
+              }}
+              onBlur={() => set("slug", slugify(form.slug))}
+              aria-describedby="slug-state"
+            />
+          </span>
+          <span id="slug-state" className={`adm-slug-state ${slugCheck.state}`} aria-live="polite">
+            {slugCheck.state === "checking" && "Wird geprüft …"}
+            {slugCheck.state === "free" && (
+              <>
+                <Check className="ic" strokeWidth={1.8} aria-hidden="true" /> Frei
+              </>
+            )}
+            {slugCheck.state === "taken" && (
+              <>
+                Schon vergeben.{" "}
+                <button type="button" className="adm-linkbtn" onClick={() => set("slug", slugCheck.suggestion ?? form.slug)}>
+                  „{slugCheck.suggestion}“ nehmen
+                </button>
+              </>
+            )}
+          </span>
+        </label>
 
         <label className="adm-lbl">
           Veröffentlichungsdatum
@@ -441,10 +433,14 @@ export default function PostForm({ initialPost }: { initialPost?: Post }) {
           {futureDate && <span className="adm-hint">Liegt in der Zukunft: Der Beitrag erscheint dann automatisch (spätestens nach wenigen Minuten).</span>}
         </label>
 
+        </details>
+
+        {initialPost?.pinned && (
         <label className="adm-check">
           <input type="checkbox" checked={form.pinned} onChange={(e) => set("pinned", e.target.checked)} />
-          <span>Oben anheften – erscheint vor allen anderen Beiträgen</span>
+          <span>Dieser Beitrag ist oben angeheftet – Haken entfernen, um ihn zu lösen</span>
         </label>
+        )}
       </section>
 
       <div className="adm-savebar" role="region" aria-label="Speichern">

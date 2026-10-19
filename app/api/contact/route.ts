@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createSubmission, markQuestionsSent } from "@/lib/submissions";
 import { isDbConfigured } from "@/lib/supabase";
 import { MAIL_TO, CONTACT_EMAIL } from "@/lib/site";
-import { sendMail } from "@/lib/mail";
+import { consumePublicMailQuota, sendMail } from "@/lib/mail";
 import { getQuestionnaire, renderQuestionnaireEmail } from "@/lib/questionnaire";
 import {
   FIELD_LIMITS,
@@ -59,23 +59,26 @@ export async function POST(request: NextRequest) {
 
   // Die Nachricht steht jetzt in der Datenbank und ist im Admin sichtbar –
   // E-Mail-Probleme dürfen die Antwort an die Besucher:in nicht mehr kippen.
-  const notify = await sendMail({
-    to: MAIL_TO,
-    replyTo: email,
-    subject: wantsQuestions
-      ? `Neue Nachricht von ${name} (möchte die Reflexionsfragen)`
-      : `Neue Nachricht von ${name}`,
-    text:
-      `Name: ${name}\nE-Mail: ${email}\n` +
-      (wantsQuestions ? "Wunsch: die 7 Reflexionsfragen per E-Mail\n" : "") +
-      `\nNachricht:\n${message}`,
-  });
+  const mailAllowed = await consumePublicMailQuota();
+  const notify = !mailAllowed
+    ? ({ ok: false, error: "Tageslimit erreicht" } as const)
+    : await sendMail({
+        to: MAIL_TO,
+        replyTo: email,
+        subject: wantsQuestions
+          ? `Neue Nachricht von ${name} (möchte die Reflexionsfragen)`
+          : `Neue Nachricht von ${name}`,
+        text:
+          `Name: ${name}\nE-Mail: ${email}\n` +
+          (wantsQuestions ? "Wunsch: die 7 Reflexionsfragen per E-Mail\n" : "") +
+          `\nNachricht:\n${message}`,
+      });
   if (!notify.ok) console.error("Kontaktformular: Benachrichtigung fehlgeschlagen", notify.error);
 
   if (wantsQuestions) {
     try {
       const questionnaire = await getQuestionnaire();
-      if (questionnaire.autoSend) {
+      if (questionnaire.autoSend && (await consumePublicMailQuota())) {
         const { subject, text, html } = renderQuestionnaireEmail(questionnaire, name);
         const sent = await sendMail({ to: email, replyTo: MAIL_TO, subject, text, html });
         if (sent.ok) await markQuestionsSent(id, Date.now());

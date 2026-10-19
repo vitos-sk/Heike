@@ -35,6 +35,10 @@ const BLOCK_TYPES: { type: BlockType; label: string; icon: LucideIcon }[] = [
   { type: "divider", label: "Trenner", icon: Minus },
 ];
 
+// Neu hinzufügen lassen sich nur diese Blöcke; ältere Beiträge mit Zitat, Liste, Button
+// oder Trenner bleiben unverändert bearbeitbar.
+const ADDABLE: BlockType[] = ["paragraph", "heading", "image"];
+
 const newId = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : Math.random().toString(36).slice(2);
 
@@ -100,7 +104,7 @@ function AutoTextarea({
 function AddTray({ onSelect, label }: { onSelect: (type: BlockType) => void; label: string }) {
   return (
     <div className="adm-tray" role="group" aria-label={label}>
-      {BLOCK_TYPES.map(({ type, label: text, icon: Icon }) => (
+      {BLOCK_TYPES.filter(({ type }) => ADDABLE.includes(type)).map(({ type, label: text, icon: Icon }) => (
         <button key={type} type="button" onClick={() => onSelect(type)}>
           <Icon className="ic" strokeWidth={1.6} aria-hidden="true" />
           {text}

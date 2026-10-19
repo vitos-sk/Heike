@@ -3,8 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Archive,
-  ArchiveRestore,
   Check,
   CheckCheck,
   Loader2,
@@ -18,7 +16,7 @@ import { api } from "@/components/admin/api";
 import { formatDateTime } from "@/lib/postDate";
 import type { Submission, SubmissionStatus } from "@/types/submission";
 
-type Busy = "status" | "delete" | "questions" | "note" | null;
+type Busy = "status" | "delete" | "questions" | null;
 
 export default function SubmissionDetail({
   submission,
@@ -31,8 +29,6 @@ export default function SubmissionDetail({
   const [busy, setBusy] = useState<Busy>(null);
   const [error, setError] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [note, setNote] = useState(submission.note);
-  const [noteSaved, setNoteSaved] = useState(false);
   const markedRef = useRef(false);
 
   // Beim Öffnen automatisch als gelesen markieren.
@@ -89,27 +85,7 @@ export default function SubmissionDetail({
     }
   }
 
-  async function saveNote() {
-    if (note === submission.note) return;
-    setBusy("note");
-    setError(null);
-    try {
-      await api(`/api/admin/submissions/${submission.id}`, {
-        method: "PATCH",
-        body: JSON.stringify({ note }),
-      });
-      setNoteSaved(true);
-      setTimeout(() => setNoteSaved(false), 2000);
-      router.refresh();
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setBusy(null);
-    }
-  }
-
-  const archived = submission.status === "archived";
-  const answered = submission.status === "answered";
+  const done = submission.status === "answered" || submission.status === "archived";
   const replySubject = encodeURIComponent(`Re: Deine Nachricht an Heike Schaub`);
   const replyBody = encodeURIComponent(`Hallo ${submission.name.split(" ")[0]},\n\n\n\n`);
 
@@ -139,20 +115,15 @@ export default function SubmissionDetail({
           Antworten
         </a>
 
-        {answered ? (
+        {done ? (
           <button type="button" className="btn btn--ghost" disabled={busy !== null} onClick={() => setStatus("read")}>
             <RotateCcw className="ic" strokeWidth={1.6} aria-hidden="true" />
             Wieder öffnen
           </button>
         ) : (
-          <button
-            type="button"
-            className="btn btn--ghost"
-            disabled={busy !== null || archived}
-            onClick={() => setStatus("answered")}
-          >
+          <button type="button" className="btn btn--ghost" disabled={busy !== null} onClick={() => setStatus("answered")}>
             {busy === "status" ? <Loader2 className="ic adm-spin" /> : <CheckCheck className="ic" strokeWidth={1.6} aria-hidden="true" />}
-            Als beantwortet markieren
+            Als erledigt markieren
           </button>
         )}
       </div>
@@ -194,22 +165,6 @@ export default function SubmissionDetail({
         </p>
       )}
 
-      <div className="adm-field">
-        <label htmlFor={`note-${submission.id}`}>Notiz nur für dich</label>
-        <textarea
-          id={`note-${submission.id}`}
-          rows={3}
-          value={note}
-          maxLength={4000}
-          placeholder="z. B. Termin vereinbart, zurückrufen …"
-          onChange={(e) => setNote(e.target.value)}
-          onBlur={saveNote}
-        />
-        <span className="adm-saved" aria-live="polite">
-          {busy === "note" ? "Speichert …" : noteSaved ? "Gespeichert" : ""}
-        </span>
-      </div>
-
       {error && (
         <p className="adm-error" role="alert">
           {error}
@@ -217,20 +172,6 @@ export default function SubmissionDetail({
       )}
 
       <footer className="adm-detail-foot">
-        <button
-          type="button"
-          className="adm-linkbtn"
-          disabled={busy !== null}
-          onClick={() => setStatus(archived ? "read" : "archived")}
-        >
-          {archived ? (
-            <ArchiveRestore className="ic" strokeWidth={1.6} aria-hidden="true" />
-          ) : (
-            <Archive className="ic" strokeWidth={1.6} aria-hidden="true" />
-          )}
-          {archived ? "Aus dem Archiv holen" : "Archivieren"}
-        </button>
-
         {confirmDelete ? (
           <span className="adm-confirm" role="alertdialog" aria-label="Löschen bestätigen">
             Endgültig löschen?

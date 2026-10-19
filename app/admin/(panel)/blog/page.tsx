@@ -34,7 +34,7 @@ function PostRow({ post }: { post: Post }) {
             {post.title}
           </span>
           <span className="meta">
-            <span className="adm-pill">{POST_TYPE_LABELS[post.type]}</span>
+            {post.type !== "article" && <span className="adm-pill">{POST_TYPE_LABELS[post.type]}</span>}
             {post.status === "draft" ? (
               <span className="adm-pill warn">Entwurf</span>
             ) : (
@@ -86,7 +86,7 @@ export default async function BlogAdminPage({ searchParams }: { searchParams: { 
         <div>
           <h1 className="adm-h1">Blog</h1>
           <p className="adm-sub">
-            {posts.length} {posts.length === 1 ? "Beitrag" : "Beiträge"} – Neuigkeiten, Ankündigungen und Events für deine Website.
+            {posts.length} {posts.length === 1 ? "Beitrag" : "Beiträge"} – Texte mit Bildern für deine Website.
           </p>
         </div>
         <Link href="/admin/blog/neu" className="btn">

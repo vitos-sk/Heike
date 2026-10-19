@@ -3,7 +3,7 @@ import { getAdminAccount } from "@/lib/adminAccount";
 import { GATE_QUERY_PARAM } from "@/lib/gate";
 import { headers } from "next/headers";
 
-export const metadata = { title: "Zugang" };
+export const metadata = { title: "Mein Zugang" };
 
 export default async function AccessPage() {
   const account = await getAdminAccount().catch(() => null);

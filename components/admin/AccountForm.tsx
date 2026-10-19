@@ -76,7 +76,7 @@ export default function AccountForm({
   return (
     <div className="adm-page">
       <header className="adm-head">
-        <h1 className="adm-h1">Zugang</h1>
+        <h1 className="adm-h1">Mein Zugang</h1>
         <p className="adm-sub">E-Mail und Passwort für deine Verwaltung.</p>
       </header>
 

@@ -1710,3 +1710,25 @@
 .adm-auth-card .btn {
   justify-self: stretch;
 }
+
+/* Einklappbare „Weitere Einstellungen“ im Beitrags-Formular */
+.adm-more-opts {
+  border-top: 1px solid var(--adm-line, rgba(0, 0, 0, 0.1));
+  padding-top: 0.9rem;
+  display: grid;
+  gap: 1rem;
+}
+.adm-more-opts > summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+.adm-more-opts > summary::-webkit-details-marker {
+  display: none;
+}
+.adm-more-opts > summary::before {
+  content: "＋ ";
+}
+.adm-more-opts[open] > summary::before {
+  content: "－ ";
+}

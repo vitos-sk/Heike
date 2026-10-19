@@ -40,10 +40,10 @@ export default function AdminShell({
 
   const items: NavItem[] = [
     { href: "/admin", label: "Übersicht", icon: LayoutDashboard },
-    { href: "/admin/briefe", label: "Briefe", icon: Mail, badge: unread, badgeTone: "alert" },
+    { href: "/admin/briefe", label: "Nachrichten", icon: Mail, badge: unread, badgeTone: "alert" },
     { href: "/admin/blog", label: "Blog", icon: PenLine, badge: drafts, badgeTone: "quiet" },
-    { href: "/admin/fragen", label: "Fragen", icon: ListChecks },
-    { href: "/admin/zugang", label: "Zugang", icon: KeyRound },
+    { href: "/admin/fragen", label: "Fragen-Mail", icon: ListChecks },
+    { href: "/admin/zugang", label: "Mein Zugang", icon: KeyRound },
   ];
 
   const isActive = (href: string) =>

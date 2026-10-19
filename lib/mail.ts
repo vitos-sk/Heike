@@ -1,4 +1,5 @@
 import { MAIL_FROM } from "@/lib/site";
+import { consumeQuota } from "@/lib/rateLimit";
 
 // Resend per REST-Aufruf — kein zusätzliches Paket nötig.
 export type MailInput = {
@@ -13,6 +14,19 @@ export type MailResult = { ok: true } | { ok: false; error: string };
 
 export function isMailConfigured(): boolean {
   return Boolean(process.env.RESEND_API_KEY);
+}
+
+// Resend (kostenlos) erlaubt 100 Mails pro Tag. Mails, die durch Besucher:innen ausgelöst
+// werden (Benachrichtigung, automatische Fragen), dürfen davon höchstens 60 verbrauchen –
+// der Rest bleibt für Heike (Antworten, Fragen senden, Passwort vergessen).
+// Ist das Limit erreicht, wird die Nachricht trotzdem gespeichert und im Admin angezeigt.
+const PUBLIC_MAIL_DAILY_LIMIT = 60;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export async function consumePublicMailQuota(): Promise<boolean> {
+  const ok = await consumeQuota("mail:public-daily", PUBLIC_MAIL_DAILY_LIMIT, DAY_MS);
+  if (!ok) console.error("Mail-Tageslimit für Formular-Mails erreicht – Mail wird übersprungen");
+  return ok;
 }
 
 export async function sendMail(input: MailInput): Promise<MailResult> {

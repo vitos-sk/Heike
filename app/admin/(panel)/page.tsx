@@ -6,7 +6,6 @@ import { getAdminAccount } from "@/lib/adminAccount";
 import { getQuestionnaire } from "@/lib/questionnaire";
 import { isMailConfigured } from "@/lib/mail";
 import { formatDateTime, formatRelative } from "@/lib/postDate";
-import { POST_TYPE_LABELS } from "@/types/post";
 
 export const metadata = { title: "Übersicht" };
 
@@ -59,12 +58,12 @@ export default async function OverviewPage() {
       </header>
 
       <section className="adm-tiles" aria-label="Auf einen Blick">
-        <Link href="/admin/briefe?f=neu" className={`adm-tile adm-tile--lead${unread.length ? " has" : ""}`}>
+        <Link href="/admin/briefe" className={`adm-tile adm-tile--lead${unread.length ? " has" : ""}`}>
           <span className="n">{unread.length}</span>
           <span className="l">Neue Nachrichten</span>
           <ArrowRight className="ic go" strokeWidth={1.6} aria-hidden="true" />
         </Link>
-        <Link href="/admin/briefe?f=fragen" className="adm-tile">
+        <Link href="/admin/briefe" className="adm-tile">
           <span className="n">{openQuestions.length}</span>
           <span className="l">Fragen noch nicht gesendet</span>
           <ArrowRight className="ic go" strokeWidth={1.6} aria-hidden="true" />
@@ -122,7 +121,7 @@ export default async function OverviewPage() {
             </Link>
           </div>
           {recentPosts.length === 0 ? (
-            <p className="adm-muted">Noch kein Beitrag. Schreib deinen ersten – etwa eine Ankündigung oder einen Event.</p>
+            <p className="adm-muted">Noch kein Beitrag. Schreib deinen ersten.</p>
           ) : (
             <ul className="adm-mini">
               {recentPosts.map((p) => (
@@ -134,7 +133,7 @@ export default async function OverviewPage() {
                     <span className="txt">
                       <b>{p.title}</b>
                       <span className="pv">
-                        {POST_TYPE_LABELS[p.type]} · {p.status === "draft" ? "Entwurf" : "Veröffentlicht"}
+                        {p.status === "draft" ? "Entwurf" : "Veröffentlicht"}
                       </span>
                     </span>
                     <time className="when" dateTime={new Date(p.updatedAt).toISOString()}>
@@ -156,39 +155,22 @@ export default async function OverviewPage() {
           <Plus className="ic" strokeWidth={1.6} aria-hidden="true" />
           Neuer Beitrag
         </Link>
-        <Link href="/admin/fragen" className="btn btn--ghost">
-          <ListChecks className="ic" strokeWidth={1.6} aria-hidden="true" />
-          {questionnaire.questions.length} Fragen bearbeiten
-        </Link>
         <a href="/" target="_blank" rel="noopener noreferrer" className="btn btn--ghost">
           <ExternalLink className="ic" strokeWidth={1.6} aria-hidden="true" />
           Website ansehen
         </a>
       </section>
 
-      <section className="adm-status" aria-label="Systemstatus">
-        <h2 className="adm-h3">Einrichtung</h2>
-        <ul>
-          <li className="ok">
-            <CheckCircle2 className="ic" strokeWidth={1.6} aria-hidden="true" />
-            Datenbank verbunden
-          </li>
-          <li className={mailOk ? "ok" : "warn"}>
-            {mailOk ? (
-              <CheckCircle2 className="ic" strokeWidth={1.6} aria-hidden="true" />
-            ) : (
+      {!mailOk && (
+        <section className="adm-status" aria-label="Hinweis">
+          <ul>
+            <li className="warn">
               <CircleAlert className="ic" strokeWidth={1.6} aria-hidden="true" />
-            )}
-            {mailOk
-              ? "E-Mail-Versand eingerichtet"
-              : "E-Mail-Versand fehlt – Benachrichtigungen und Fragen-Versand sind aus (RESEND_API_KEY)"}
-          </li>
-          <li className="ok">
-            <Mail className="ic" strokeWidth={1.6} aria-hidden="true" />
-            Angemeldet als {account?.email ?? "–"}
-          </li>
-        </ul>
-      </section>
+              E-Mail-Versand ist noch nicht eingerichtet – bitte kurz melden (RESEND_API_KEY).
+            </li>
+          </ul>
+        </section>
+      )}
     </div>
   );
 }

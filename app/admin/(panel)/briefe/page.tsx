@@ -6,35 +6,23 @@ import { formatRelative } from "@/lib/postDate";
 import SubmissionDetail from "@/components/admin/SubmissionDetail";
 import type { Submission } from "@/types/submission";
 
-export const metadata = { title: "Briefe" };
+export const metadata = { title: "Nachrichten" };
 
 const FILTERS = [
-  { id: "alle", label: "Alle" },
-  { id: "neu", label: "Neu" },
-  { id: "fragen", label: "Fragen offen" },
-  { id: "beantwortet", label: "Beantwortet" },
-  { id: "archiv", label: "Archiv" },
+  { id: "offen", label: "Offen" },
+  { id: "erledigt", label: "Erledigt" },
 ] as const;
 type FilterId = (typeof FILTERS)[number]["id"];
 
 function matches(s: Submission, filter: FilterId): boolean {
-  switch (filter) {
-    case "alle":
-      return s.status !== "archived";
-    case "neu":
-      return s.status === "new";
-    case "fragen":
-      return s.wantsQuestions && !s.questionsSentAt && s.status !== "archived";
-    case "beantwortet":
-      return s.status === "answered";
-    case "archiv":
-      return s.status === "archived";
-  }
+  // „Erledigt“ umfasst auch ältere Nachrichten, die früher archiviert wurden.
+  const done = s.status === "answered" || s.status === "archived";
+  return filter === "erledigt" ? done : !done;
 }
 
 function href(params: { id?: string; f?: string; q?: string }): string {
   const sp = new URLSearchParams();
-  if (params.f && params.f !== "alle") sp.set("f", params.f);
+  if (params.f && params.f !== "offen") sp.set("f", params.f);
   if (params.q) sp.set("q", params.q);
   if (params.id) sp.set("id", params.id);
   const qs = sp.toString();
@@ -50,11 +38,13 @@ export default async function MailPage({
 
   const filter: FilterId = FILTERS.some((f) => f.id === searchParams.f)
     ? (searchParams.f as FilterId)
-    : "alle";
+    : "offen";
   const q = (searchParams.q ?? "").trim();
   const needle = q.toLowerCase();
 
   const counts = Object.fromEntries(FILTERS.map((f) => [f.id, all.filter((s) => matches(s, f.id)).length])) as Record<FilterId, number>;
+
+  const newCount = all.filter((s) => s.status === "new").length;
 
   const list = all
     .filter((s) => matches(s, filter))
@@ -65,16 +55,16 @@ export default async function MailPage({
   return (
     <div className="adm-page adm-page--wide">
       <header className="adm-head">
-        <h1 className="adm-h1">Briefe</h1>
+        <h1 className="adm-h1">Nachrichten</h1>
         <p className="adm-sub">
-          Nachrichten aus deinem Kontaktformular. {counts.neu > 0 ? `${counts.neu} neu.` : "Alles gelesen."}
+          Hier landen die Nachrichten aus dem Kontaktformular deiner Website. {newCount > 0 ? `${newCount} ungelesen.` : "Alles gelesen."}
         </p>
       </header>
 
       <div className={`adm-mail${selected ? " has-detail" : ""}`}>
         <aside className="adm-mail-list" aria-label="Nachrichten">
           <form className="adm-search" action="/admin/briefe" role="search">
-            {filter !== "alle" && <input type="hidden" name="f" value={filter} />}
+            {filter !== "offen" && <input type="hidden" name="f" value={filter} />}
             <Search className="ic" strokeWidth={1.6} aria-hidden="true" />
             <input
               type="search"
@@ -106,7 +96,9 @@ export default async function MailPage({
               <p>
                 {all.length === 0
                   ? "Noch keine Nachrichten. Sobald jemand das Formular auf deiner Website ausfüllt, erscheint es hier."
-                  : "Nichts gefunden."}
+                  : filter === "offen" && !needle
+                    ? "Alles erledigt – keine offenen Nachrichten."
+                    : "Nichts gefunden."}
               </p>
             </div>
           ) : (
@@ -134,7 +126,7 @@ export default async function MailPage({
                             {s.questionsSentAt ? "Fragen gesendet" : "möchte die Fragen"}
                           </span>
                         )}
-                        {s.status === "answered" && <span className="adm-pill ok">Beantwortet</span>}
+                        {(s.status === "answered" || s.status === "archived") && <span className="adm-pill ok">Erledigt</span>}
                       </span>
                     </span>
                   </Link>
