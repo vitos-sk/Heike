@@ -73,38 +73,28 @@ export function impressumSections(): LegalSection[] {
         "Links zu meinem Lifeplus-Shop sind Werbelinks. Wenn Sie über diese Links bestellen, kommt der Kaufvertrag mit Lifeplus zustande, nicht mit mir. Für vermittelte Bestellungen erhalte ich gegebenenfalls eine Vergütung.",
       ],
     },
-    {
-      title: "Hinweis zur Gesundheit",
-      lines: [
-        "Meine Inhalte und Beratungen ersetzen keine ärztliche Diagnose oder Behandlung. Bei gesundheitlichen Beschwerden wenden Sie sich bitte an eine Ärztin oder einen Arzt.",
-      ],
-    },
-    {
-      title: "Verbraucherstreitbeilegung",
-      lines: [
-        "Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.",
-      ],
-    },
-    {
-      title: "Haftung für Inhalte und Links",
-      lines: [
-        "Ich erstelle die Inhalte dieser Website mit großer Sorgfalt. Für die Richtigkeit, Vollständigkeit und Aktualität kann ich jedoch keine Gewähr übernehmen.",
-        "Diese Website enthält Links zu externen Websites Dritter (zum Beispiel Facebook, Instagram und Lifeplus), auf deren Inhalte ich keinen Einfluss habe. Für diese fremden Inhalte ist stets der jeweilige Anbieter verantwortlich. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar. Sobald mir solche bekannt werden, entferne ich die Links umgehend.",
-      ],
-    },
-    {
-      title: "Urheberrecht",
-      lines: [
-        "Die Texte, Bilder und sonstigen Inhalte dieser Website unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung und Verbreitung außerhalb der Grenzen des Urheberrechts bedürfen meiner schriftlichen Zustimmung.",
-        ...(owner.imageCredits.trim() ? [`Bildnachweis: ${owner.imageCredits.trim()}`] : []),
-      ],
-    },
   );
+
+  if (owner.imageCredits.trim()) {
+    sections.push({ title: "Bildnachweis", lines: [owner.imageCredits.trim()] });
+  }
 
   return sections;
 }
 
 export function datenschutzSections(): LegalSection[] {
+  return numbered(rawDatenschutz());
+}
+
+// Nummeriert die Abschnitte automatisch, damit beim Streichen nichts durcheinanderkommt.
+function numbered(sections: LegalSection[]): LegalSection[] {
+  return sections.map((section, i) => ({
+    ...section,
+    title: `${i + 1}. ${section.title.replace(/^\d+\.\s*/, "")}`,
+  }));
+}
+
+function rawDatenschutz(): LegalSection[] {
   const contactLine = `${owner.name}, ${ph(owner.street, "Straße und Hausnummer")}, ${ph(owner.zip, "PLZ")} ${ph(owner.city, "Ort")}`;
   const authority = ph(owner.authority, "zuständige Datenschutz-Aufsichtsbehörde");
 
@@ -173,12 +163,6 @@ export function datenschutzSections(): LegalSection[] {
       ],
     },
     {
-      title: "10. Externe Links",
-      lines: [
-        "Diese Website enthält Links zu Facebook, Instagram und zu meinem Lifeplus-Shop. Es handelt sich um einfache Links, keine eingebetteten Inhalte: Daten werden erst übermittelt, wenn Sie einen Link anklicken und die fremde Seite öffnen. Für die Verarbeitung dort ist der jeweilige Anbieter verantwortlich; bitte beachten Sie dessen Datenschutzhinweise.",
-      ],
-    },
-    {
       title: "11. Ihre Rechte",
       lines: ["Sie haben gegenüber mir folgende Rechte hinsichtlich Ihrer personenbezogenen Daten:"],
       list: [
@@ -199,9 +183,8 @@ export function datenschutzSections(): LegalSection[] {
       ],
     },
     {
-      title: "13. Sicherheit und Stand",
+      title: "Stand",
       lines: [
-        "Diese Website nutzt aus Sicherheitsgründen eine verschlüsselte Verbindung (HTTPS/TLS). Sie erkennen sie am Schloss-Symbol in der Adresszeile Ihres Browsers.",
         `Stand dieser Datenschutzerklärung: ${LEGAL_STAND}. Ändern sich die Website oder die rechtlichen Vorgaben, passe ich sie an.`,
       ],
     },
