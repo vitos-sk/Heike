@@ -73,6 +73,16 @@ export const services = {
         "Alltagstaugliche Impulse, die zu deinem Leben passen – ohne Druck und ohne starre Verbote.",
     },
     {
+      title: "Gewichtsmanagement",
+      description:
+        "Alltagstaugliche Begleitung für ein gutes Körpergefühl – ohne Diätdruck, Verbote oder Verzicht um jeden Preis.",
+    },
+    {
+      title: "Ernährung und Darmgesundheit",
+      description:
+        "Verständliche Impulse rund um ausgewogene Ernährung und ein gutes Bauchgefühl im Alltag.",
+    },
+    {
       title: "Kindergesundheit",
       description:
         "Gesundheit von Anfang an stärken – mit Erfahrung, Fachwissen und einem liebevollen Blick auf die ganze Familie.",
@@ -83,14 +93,9 @@ export const services = {
         "Ein verständlicher Blick auf Lebensstil, Mikronährstoffe, Routinen und Gesundheitsbewusstsein.",
     },
     {
-      title: "Lifeplus Konzept",
+      title: "Lifeplus-Konzept",
       description:
         "Bewusste Ernährung, Mikronährstoffe, Bewegung und Regeneration als Bausteine eines gesunden Lebensstils.",
-    },
-    {
-      title: "Selbstständige Perspektiven",
-      description:
-        "Für Menschen, die Gesundheit lieben und sich ein zweites Standbein im Empfehlungsmarketing aufbauen möchten.",
     },
   ],
 };
@@ -127,7 +132,7 @@ export const qualifications = {
     heading: "Aus- und Weiterbildungen",
     items: [
       "Examinierte Kinderkrankenschwester",
-      "Langjährige Erfahrung in der Pflegebegutachtung",
+      "Langjährige Erfahrung im Gesundheits- und Pflegebereich",
       "Weiterbildung im Bereich Ernährungsberatung",
     ],
   },
@@ -181,6 +186,7 @@ export const contact = {
     { label: "Facebook", href: "https://www.facebook.com/share/1bCRui9Ppv/" },
     { label: "Instagram", href: "https://www.instagram.com/heikerle_77" },
   ],
+  shop: { label: "Zum Shop", href: "https://www.lifeplus.com/SHB2IJ/S/" },
   form: {
     nameLabel: "Name",
     emailLabel: "E-Mail",

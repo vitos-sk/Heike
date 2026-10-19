@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Facebook, Info, Instagram, Mail, Phone } from "lucide-react";
+import { Facebook, Info, Instagram, Mail, Phone, ShoppingBag } from "lucide-react";
 import { contact, footer, header } from "@/lib/placeholder-data";
 import { listPublishedPosts } from "@/lib/posts";
 
@@ -68,6 +68,12 @@ export default async function Footer() {
                   </a>
                 </li>
               )}
+              <li>
+                <a href={contact.shop.href} target="_blank" rel="noopener noreferrer sponsored">
+                  <ShoppingBag className="ic" strokeWidth={1.6} aria-hidden="true" />
+                  {contact.shop.label}
+                </a>
+              </li>
             </ul>
           </div>
         </div>

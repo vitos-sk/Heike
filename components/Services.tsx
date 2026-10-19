@@ -5,9 +5,10 @@ import {
   ArrowRight,
   Baby,
   Compass,
-  Handshake,
+  Leaf,
   Plus,
   Salad,
+  Scale,
   ShieldCheck,
   Sun,
   type LucideIcon,
@@ -18,10 +19,11 @@ import { services } from "@/lib/placeholder-data";
 const meta: { icon: LucideIcon; cta: string; href: string }[] = [
   { icon: Compass, cta: "Gespräch vereinbaren", href: "#contact" },
   { icon: Salad, cta: "Gespräch vereinbaren", href: "#contact" },
+  { icon: Scale, cta: "Gespräch vereinbaren", href: "#contact" },
+  { icon: Leaf, cta: "Gespräch vereinbaren", href: "#contact" },
   { icon: Baby, cta: "Mehr zur Kindergesundheit", href: "#kindergesundheit" },
   { icon: ShieldCheck, cta: "Gespräch vereinbaren", href: "#contact" },
   { icon: Sun, cta: "Mein Konzept ansehen", href: "#konzept" },
-  { icon: Handshake, cta: "Gespräch vereinbaren", href: "#contact" },
 ];
 
 export default function Services() {

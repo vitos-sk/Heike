@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Check, Facebook, Instagram, Mail, Phone, Send } from "lucide-react";
+import { Check, Facebook, Instagram, Mail, Phone, Send, ShoppingBag } from "lucide-react";
 import { contact } from "@/lib/placeholder-data";
 import { HONEYPOT_FIELD } from "@/lib/honeypot";
 
@@ -256,6 +256,10 @@ export default function Contact() {
                 {s.label}
               </a>
             ))}
+            <a href={contact.shop.href} target="_blank" rel="noopener noreferrer sponsored">
+              <ShoppingBag className="ic" strokeWidth={1.6} aria-hidden="true" />
+              {contact.shop.label}
+            </a>
           </div>
         </div>
       </div>
