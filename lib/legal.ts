@@ -15,12 +15,13 @@ export const owner = {
   vatId: "",
   // Zuständige Datenschutz-Aufsichtsbehörde des Bundeslandes, z. B.
   // „Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz“
-  authority: "",
+  authority:
+    "Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg, Lautenschlagerstraße 20, 70173 Stuttgart",
   // Wer hat die Fotos / das Logo gemacht? Leer lassen, wenn alles von Heike selbst ist.
   imageCredits: "",
 };
 
-export const LEGAL_STAND = "Oktober 2026";
+export const LEGAL_STAND = "November 2026";
 
 const ph = (value: string, label: string) => (value.trim() ? value.trim() : `[${label}]`);
 
@@ -131,7 +132,7 @@ function rawDatenschutz(): LegalSection[] {
     {
       title: "5. Datenbank (Speicherung der Nachrichten)",
       lines: [
-        "Ihre Nachricht wird in einer Datenbank gespeichert, die ich über den Anbieter Supabase Inc., USA (supabase.com) nutze. Die Daten liegen auf Servern in den USA (Rechenzentrum Nord-Virginia). Sie sind nur für mich im geschützten Verwaltungsbereich sichtbar. Mit Supabase besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO). Die Übermittlung in die USA stützt sich auf die EU-Standardvertragsklauseln (Art. 46 DSGVO).",
+        "Ihre Nachricht wird in einer Datenbank gespeichert, die ich über den Anbieter Supabase Inc., USA (supabase.com) nutze. Die Daten können dabei auch auf Servern in den USA verarbeitet werden. Sie sind nur für mich im geschützten Verwaltungsbereich sichtbar. Mit Supabase besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO). Eine Übermittlung in die USA stützt sich auf die EU-Standardvertragsklauseln (Art. 46 DSGVO).",
         "Ebenfalls dort liegen die Beiträge meines Blogs und die dazugehörigen Bilder. Diese Inhalte sind öffentlich gedacht und enthalten keine Daten von Besucherinnen und Besuchern.",
       ],
     },
@@ -160,6 +161,12 @@ function rawDatenschutz(): LegalSection[] {
       lines: [
         "Für Besucherinnen und Besucher setzt diese Website keine Cookies und speichert nichts auf Ihrem Gerät. Der geschützte Verwaltungsbereich, der nur für mich zugänglich ist, verwendet ein technisch notwendiges Sitzungs-Cookie, damit ich angemeldet bleibe (§ 25 Abs. 2 Nr. 2 TDDDG). Dafür ist keine Einwilligung nötig.",
         "Die verwendeten Schriftarten sind lokal in die Website eingebunden. Beim Aufruf der Seite wird keine Verbindung zu Google oder anderen Schriftarten-Servern aufgebaut.",
+      ],
+    },
+    {
+      title: "10. Links zu anderen Seiten",
+      lines: [
+        "Auf dieser Website finden Sie Links zu meinem Facebook- und Instagram-Profil sowie zu meinem Lifeplus-Shop. Es handelt sich um einfache Links, es werden keine Inhalte dieser Anbieter in die Seite eingebunden. Erst wenn Sie einen Link anklicken, werden Daten (zum Beispiel Ihre IP-Adresse) an den jeweiligen Anbieter übertragen. Auf die dortige Datenverarbeitung habe ich keinen Einfluss; es gelten die Datenschutzhinweise der Anbieter.",
       ],
     },
     {
