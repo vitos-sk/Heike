@@ -1,11 +1,11 @@
-// Angaben für Impressum und Datenschutzerklärung.
-// Leere Felder erscheinen auf den Seiten als „[Platzhalter]“ und werden im Admin
-// (Übersicht) als Hinweis angezeigt – die Website sollte erst veröffentlicht werden,
-// wenn nichts mehr fehlt.
+// Angaben für Impressum und Datenschutzerklärung (bewusst knapp gehalten).
+// Leere Felder werden auf den Seiten einfach weggelassen. Fehlende Pflichtangaben
+// (Anschrift) zeigt der Admin in der Übersicht als Hinweis an.
 
 export const owner = {
   name: "Heike Schaub",
-  // Pflicht (ladungsfähige Anschrift, kein Postfach):
+  // Ladungsfähige Anschrift (kein Postfach). Sobald ausgefüllt, erscheint sie automatisch
+  // im Impressum und in der Datenschutzerklärung.
   street: "",
   zip: "",
   city: "",
@@ -13,17 +13,13 @@ export const owner = {
   email: "Schaub-heike@gmx.de",
   // Nur ausfüllen, wenn vorhanden (sonst leer lassen):
   vatId: "",
-  // Zuständige Datenschutz-Aufsichtsbehörde des Bundeslandes, z. B.
-  // „Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Rheinland-Pfalz“
-  authority:
-    "Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg, Lautenschlagerstraße 20, 70173 Stuttgart",
+  // Zuständige Datenschutz-Aufsichtsbehörde (Wohnort Baden-Württemberg)
+  authority: "Der Landesbeauftragte für den Datenschutz und die Informationsfreiheit Baden-Württemberg, Stuttgart",
   // Wer hat die Fotos / das Logo gemacht? Leer lassen, wenn alles von Heike selbst ist.
   imageCredits: "",
 };
 
 export const LEGAL_STAND = "November 2026";
-
-const ph = (value: string, label: string) => (value.trim() ? value.trim() : `[${label}]`);
 
 /** Welche Pflichtangaben fehlen noch? (für den Hinweis im Admin) */
 export function missingLegalFields(): string[] {
@@ -31,23 +27,29 @@ export function missingLegalFields(): string[] {
   if (!owner.street.trim()) missing.push("Straße und Hausnummer");
   if (!owner.zip.trim()) missing.push("PLZ");
   if (!owner.city.trim()) missing.push("Ort");
-  if (!owner.authority.trim()) missing.push("Datenschutz-Aufsichtsbehörde");
   return missing;
 }
 
 export type LegalSection = { title: string; lines: string[]; list?: string[] };
 
-const address = () => [
-  owner.name,
-  ph(owner.street, "Straße und Hausnummer"),
-  `${ph(owner.zip, "PLZ")} ${ph(owner.city, "Ort")}`,
-];
+/** Name und – soweit angegeben – Anschrift, jeweils eine Zeile pro Teil. */
+function addressLines(): string[] {
+  const place = `${owner.zip.trim()} ${owner.city.trim()}`.trim();
+  return [owner.name, owner.street.trim(), place].filter(Boolean);
+}
+
+/** Anschrift in einer Zeile (für Fließtext). */
+function addressInline(): string {
+  return addressLines().join(", ");
+}
 
 export function impressumSections(): LegalSection[] {
+  const hasAddress = Boolean(owner.street.trim() && owner.city.trim());
+
   const sections: LegalSection[] = [
     {
       title: "Angaben gemäß § 5 DDG",
-      lines: [...address(), "Deutschland"],
+      lines: hasAddress ? [...addressLines(), "Deutschland"] : addressLines(),
     },
     {
       title: "Kontakt",
@@ -65,13 +67,12 @@ export function impressumSections(): LegalSection[] {
   sections.push(
     {
       title: "Verantwortlich für den Inhalt gemäß § 18 Abs. 2 MStV",
-      lines: address(),
+      lines: [owner.name],
     },
     {
       title: "Hinweis zu Lifeplus",
       lines: [
-        "Ich bin selbstständige, unabhängige Lifeplus Partnerin und nicht Angestellte der Lifeplus-Unternehmen. Meine Beratung und die Inhalte dieser Website sind meine eigenen.",
-        "Links zu meinem Lifeplus-Shop sind Werbelinks. Wenn Sie über diese Links bestellen, kommt der Kaufvertrag mit Lifeplus zustande, nicht mit mir. Für vermittelte Bestellungen erhalte ich gegebenenfalls eine Vergütung.",
+        "Ich bin selbstständige, unabhängige Lifeplus Partnerin. Links zu meinem Lifeplus-Shop sind Werbelinks: Bestellen Sie darüber, kommt der Kaufvertrag mit Lifeplus zustande, nicht mit mir, und ich erhalte gegebenenfalls eine Vergütung.",
       ],
     },
   );
@@ -89,111 +90,65 @@ export function datenschutzSections(): LegalSection[] {
 
 // Nummeriert die Abschnitte automatisch, damit beim Streichen nichts durcheinanderkommt.
 function numbered(sections: LegalSection[]): LegalSection[] {
-  return sections.map((section, i) => ({
-    ...section,
-    title: `${i + 1}. ${section.title.replace(/^\d+\.\s*/, "")}`,
-  }));
+  return sections.map((section) => {
+    if (section.title === "Stand") return section;
+    const index = sections.filter((s) => s.title !== "Stand").indexOf(section);
+    return { ...section, title: `${index + 1}. ${section.title}` };
+  });
 }
 
 function rawDatenschutz(): LegalSection[] {
-  const contactLine = `${owner.name}, ${ph(owner.street, "Straße und Hausnummer")}, ${ph(owner.zip, "PLZ")} ${ph(owner.city, "Ort")}`;
-  const authority = ph(owner.authority, "zuständige Datenschutz-Aufsichtsbehörde");
-
   return [
     {
-      title: "1. Verantwortliche und Überblick",
+      title: "Verantwortliche",
       lines: [
-        `Verantwortlich für die Datenverarbeitung auf dieser Website ist: ${contactLine}. Telefon: ${owner.phone}, E-Mail: ${owner.email}.`,
-        "Der Schutz Ihrer personenbezogenen Daten ist mir wichtig. Ich verarbeite sie nur, soweit das nötig ist, und nur so, wie es die Datenschutz-Grundverordnung (DSGVO) und das Telekommunikation-Digitale-Dienste-Datenschutz-Gesetz (TDDDG) erlauben. Diese Erklärung zeigt, welche Daten wann anfallen und was mit ihnen geschieht.",
-        "Diese Website verwendet für Besucherinnen und Besucher keine Cookies, keine Analyse- und keine Tracking-Dienste, und es werden keine Werbenetzwerke eingebunden.",
+        `Verantwortlich für die Datenverarbeitung auf dieser Website ist ${addressInline()}. Telefon: ${owner.phone}, E-Mail: ${owner.email}.`,
+        "Ich verarbeite personenbezogene Daten nur, soweit das nötig ist, und nach den Vorgaben der Datenschutz-Grundverordnung (DSGVO). Es werden keine Cookies, keine Analyse- und Tracking-Dienste und keine Werbenetzwerke eingesetzt.",
       ],
     },
     {
-      title: "2. Hosting und Server-Logfiles",
+      title: "Hosting und Dienstleister",
       lines: [
-        "Diese Website wird bei Vercel Inc., USA (vercel.com) betrieben. Beim Aufruf der Seiten verarbeitet der Anbieter technisch notwendige Daten, die Ihr Browser übermittelt: IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, Browsertyp und -version, Betriebssystem und die zuvor besuchte Seite (Referrer). Diese Daten sind notwendig, um die Seiten auszuliefern, die Stabilität und Sicherheit zu gewährleisten und Angriffe abzuwehren. Sie werden nicht mit anderen Daten zusammengeführt und nach kurzer Zeit gelöscht.",
-        "Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an einem sicheren und zuverlässigen Betrieb der Website). Mit Vercel besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO). Vercel ist unter dem EU-US Data Privacy Framework zertifiziert; ergänzend gelten die EU-Standardvertragsklauseln (Art. 46 DSGVO).",
+        "Ich nutze die folgenden Dienstleister. Mit allen besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO). Soweit Daten in die USA übermittelt werden, geschieht das auf Grundlage des EU-US Data Privacy Framework oder von EU-Standardvertragsklauseln (Art. 45, 46 DSGVO).",
       ],
-    },
-    {
-      title: "3. Kontaktformular und Nachrichten",
-      lines: [
-        "Wenn Sie mir über das Kontaktformular schreiben, verarbeite ich die Angaben, die Sie eingeben: Name, E-Mail-Adresse und Ihre Nachricht, außerdem Datum und Uhrzeit der Anfrage und – falls Sie es ankreuzen – den Wunsch, die Reflexionsfragen zu erhalten. Ich nutze diese Daten ausschließlich, um Ihre Anfrage zu beantworten.",
-        "Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, wenn Ihre Anfrage mit einem Vertrag oder vorvertraglichen Maßnahmen zusammenhängt, sonst Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse, Anfragen zu beantworten). Mit dem Häkchen bei der Datenschutzerklärung bestätigen Sie, dass Sie diese gelesen haben. Die Angabe ist freiwillig; ohne sie kann ich Ihre Anfrage allerdings nicht beantworten.",
-        "Speicherdauer: Ich lösche Ihre Nachricht, sobald Ihre Anfrage abschließend bearbeitet ist und die Daten nicht mehr gebraucht werden, in der Regel spätestens 12 Monate danach. Gesetzliche Aufbewahrungspflichten (zum Beispiel für Geschäftsbriefe nach Handels- und Steuerrecht) bleiben unberührt.",
-      ],
-    },
-    {
-      title: "4. Gesundheitsdaten – bitte sparsam sein",
-      lines: [
-        "Bitte schreiben Sie im Kontaktformular keine ausführlichen Angaben zu Ihrer Gesundheit oder der Ihrer Kinder. Solche Angaben sind besonders geschützt (Art. 9 DSGVO). Wenn Sie mir dennoch Gesundheitsdaten mitteilen, geschieht das freiwillig und ich verarbeite sie ausschließlich, um Ihre Anfrage zu beantworten. Rechtsgrundlage ist dann Ihre ausdrückliche Einwilligung (Art. 9 Abs. 2 lit. a DSGVO). Sie können sie jederzeit widerrufen.",
-      ],
-    },
-    {
-      title: "5. Datenbank (Speicherung der Nachrichten)",
-      lines: [
-        "Ihre Nachricht wird in einer Datenbank gespeichert, die ich über den Anbieter Supabase Inc., USA (supabase.com) nutze. Die Daten können dabei auch auf Servern in den USA verarbeitet werden. Sie sind nur für mich im geschützten Verwaltungsbereich sichtbar. Mit Supabase besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO). Eine Übermittlung in die USA stützt sich auf die EU-Standardvertragsklauseln (Art. 46 DSGVO).",
-        "Ebenfalls dort liegen die Beiträge meines Blogs und die dazugehörigen Bilder. Diese Inhalte sind öffentlich gedacht und enthalten keine Daten von Besucherinnen und Besuchern.",
-      ],
-    },
-    {
-      title: "6. E-Mail-Versand",
-      lines: [
-        "Für den Versand von E-Mails nutze ich Resend (Resend, Inc., USA, resend.com). Über Resend verschicke ich zum Beispiel die Benachrichtigung an mich, wenn Sie das Kontaktformular abgeschickt haben. Dabei werden Ihr Name, Ihre E-Mail-Adresse und Ihre Nachricht an Resend übermittelt. Mit Resend besteht ein Vertrag zur Auftragsverarbeitung (Art. 28 DSGVO); der Anbieter ist unter dem EU-US Data Privacy Framework zertifiziert, ergänzend gelten Standardvertragsklauseln.",
-        "Rechtsgrundlage ist Art. 6 Abs. 1 lit. b bzw. f DSGVO (Bearbeitung Ihrer Anfrage).",
-      ],
-    },
-    {
-      title: "7. Die Reflexionsfragen",
-      lines: [
-        "Wenn Sie im Formular ankreuzen, dass Sie die Reflexionsfragen erhalten möchten, schicke ich Ihnen diese persönlich an die angegebene E-Mail-Adresse. Ihre E-Mail-Adresse verwende ich dafür und für die Beantwortung Ihrer Nachricht, nicht für einen Newsletter und nicht für Werbung, solange Sie dem nicht ausdrücklich zugestimmt haben.",
-        "Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) durch das Ankreuzen. Sie können sie jederzeit mit Wirkung für die Zukunft widerrufen: eine kurze Nachricht an die oben genannte E-Mail-Adresse genügt.",
-      ],
-    },
-    {
-      title: "8. Schutz vor Missbrauch",
-      lines: [
-        "Damit das Kontaktformular nicht durch automatisierte Massenanfragen missbraucht wird, speichere ich für kurze Zeit eine Kennung Ihrer IP-Adresse (Hashwert), um die Zahl der Anfragen zu begrenzen. Die Kennung wird automatisch nach spätestens einem Tag gelöscht. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Sicherheit der Website).",
-      ],
-    },
-    {
-      title: "9. Cookies und Schriftarten",
-      lines: [
-        "Für Besucherinnen und Besucher setzt diese Website keine Cookies und speichert nichts auf Ihrem Gerät. Der geschützte Verwaltungsbereich, der nur für mich zugänglich ist, verwendet ein technisch notwendiges Sitzungs-Cookie, damit ich angemeldet bleibe (§ 25 Abs. 2 Nr. 2 TDDDG). Dafür ist keine Einwilligung nötig.",
-        "Die verwendeten Schriftarten sind lokal in die Website eingebunden. Beim Aufruf der Seite wird keine Verbindung zu Google oder anderen Schriftarten-Servern aufgebaut.",
-      ],
-    },
-    {
-      title: "10. Links zu anderen Seiten",
-      lines: [
-        "Auf dieser Website finden Sie Links zu meinem Facebook- und Instagram-Profil sowie zu meinem Lifeplus-Shop. Es handelt sich um einfache Links, es werden keine Inhalte dieser Anbieter in die Seite eingebunden. Erst wenn Sie einen Link anklicken, werden Daten (zum Beispiel Ihre IP-Adresse) an den jeweiligen Anbieter übertragen. Auf die dortige Datenverarbeitung habe ich keinen Einfluss; es gelten die Datenschutzhinweise der Anbieter.",
-      ],
-    },
-    {
-      title: "11. Ihre Rechte",
-      lines: ["Sie haben gegenüber mir folgende Rechte hinsichtlich Ihrer personenbezogenen Daten:"],
       list: [
-        "Auskunft (Art. 15 DSGVO)",
-        "Berichtigung (Art. 16 DSGVO)",
-        "Löschung (Art. 17 DSGVO)",
-        "Einschränkung der Verarbeitung (Art. 18 DSGVO)",
-        "Datenübertragbarkeit (Art. 20 DSGVO)",
-        "Widerspruch gegen Verarbeitungen auf Grundlage berechtigter Interessen (Art. 21 DSGVO)",
-        "Widerruf einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)",
+        "Vercel Inc., USA – Hosting der Website. Beim Aufruf verarbeitet der Anbieter technisch notwendige Daten (IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, Browser und Betriebssystem), um die Seiten auszuliefern und die Sicherheit zu gewährleisten. Sie werden nach kurzer Zeit gelöscht. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.",
+        "Supabase Inc., USA – Datenbank für Nachrichten aus dem Kontaktformular sowie für Blog-Beiträge und Bilder. Die Nachrichten sind nur für mich im geschützten Verwaltungsbereich sichtbar.",
+        "Resend, Inc., USA – E-Mail-Versand, zum Beispiel die Benachrichtigung an mich über eine neue Nachricht und meine Antworten an Sie.",
       ],
     },
     {
-      title: "12. Beschwerderecht",
+      title: "Kontaktformular",
       lines: [
-        `Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über die Verarbeitung Ihrer personenbezogenen Daten zu beschweren (Art. 77 DSGVO). Für mich zuständig ist: ${authority}.`,
-        "Ihre Daten werden nicht für eine automatisierte Entscheidungsfindung oder ein Profiling verwendet.",
+        "Wenn Sie mir über das Kontaktformular schreiben, verarbeite ich Ihren Namen, Ihre E-Mail-Adresse, Ihre Nachricht sowie Datum und Uhrzeit, ausschließlich um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Anfrage im Zusammenhang mit einer Beratung), sonst lit. f (berechtigtes Interesse, Anfragen zu beantworten). Ohne diese Angaben kann ich Ihre Anfrage nicht beantworten.",
+        "Ich lösche Ihre Nachricht, sobald die Anfrage erledigt ist und keine gesetzliche Aufbewahrungspflicht besteht.",
+        "Wenn Sie ankreuzen, dass Sie die Reflexionsfragen erhalten möchten, schicke ich sie Ihnen per E-Mail. Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die Sie jederzeit mit Wirkung für die Zukunft widerrufen können. Einen Newsletter oder Werbung erhalten Sie nicht.",
+        "Bitte schreiben Sie im Formular keine ausführlichen Gesundheitsangaben zu sich oder Ihren Kindern. Teilen Sie mir solche Angaben dennoch mit, verarbeite ich sie nur zur Beantwortung Ihrer Anfrage, auf Grundlage Ihrer ausdrücklichen Einwilligung (Art. 9 Abs. 2 lit. a DSGVO).",
+      ],
+    },
+    {
+      title: "Schutz vor Missbrauch",
+      lines: [
+        "Damit das Kontaktformular nicht durch automatisierte Massenanfragen missbraucht wird, speichere ich kurzzeitig eine Kennung Ihrer IP-Adresse (Hashwert, nicht die IP-Adresse selbst) und lösche sie automatisch. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (Sicherheit der Website).",
+      ],
+    },
+    {
+      title: "Cookies und Schriftarten",
+      lines: [
+        "Für Besucherinnen und Besucher setzt diese Website keine Cookies. Der Verwaltungsbereich, der nur für mich zugänglich ist, nutzt ein technisch notwendiges Anmelde-Cookie (§ 25 Abs. 2 Nr. 2 TDDDG). Die Schriftarten werden von meinem eigenen Server ausgeliefert; es wird keine Verbindung zu Google aufgebaut.",
+      ],
+    },
+    {
+      title: "Ihre Rechte und Beschwerde",
+      lines: [
+        "Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15–18, 20, 21 DSGVO) sowie auf Widerruf einer Einwilligung (Art. 7 Abs. 3 DSGVO). Eine kurze Nachricht an die oben genannte E-Mail-Adresse genügt.",
+        `Sie können sich außerdem bei einer Datenschutz-Aufsichtsbehörde beschweren (Art. 77 DSGVO). Für mich zuständig ist: ${owner.authority}.`,
+        "Eine automatisierte Entscheidungsfindung oder ein Profiling findet nicht statt.",
       ],
     },
     {
       title: "Stand",
-      lines: [
-        `Stand dieser Datenschutzerklärung: ${LEGAL_STAND}. Ändern sich die Website oder die rechtlichen Vorgaben, passe ich sie an.`,
-      ],
+      lines: [`Stand dieser Datenschutzerklärung: ${LEGAL_STAND}.`],
     },
   ];
 }
